@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Farming System</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Smart Farming and Crop Management System</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Role</th>
+            <th>Description</th>
+        </tr>
+
+        <% roles.forEach(function(role) { %>
+            <tr>
+                <td><%= role.role_id %></td>
+                <td><%= role.role_name %></td>
+                <td><%= role.description %></td>
+            </tr>
+        <% }); %>
+    </table>
+</body>
+</html>
