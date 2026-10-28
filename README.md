@@ -22,7 +22,7 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 
 | B Malingin | | crops, fields, farm\_inputs | | | |
 
-| C Quisel | | plantings, harvests, input\_usage | | | |
+| C Quisel | Galaxytamer | plantings, harvests, input_usage |Plantings CRUD screen, harvest and input usage entry |Plantings with crop, field and input totals (INNER) |Transactions |
 
 | D Rebutazo | | crop\_growth\_stages, crop\_thresholds, care\_tasks | | | |
 
