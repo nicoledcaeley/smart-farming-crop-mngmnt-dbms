@@ -28,7 +28,7 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 
 | E Rio | | sensor\_readings, alerts, audit\_logs | | | |
 
-| F Riofrir | franklinriofrir16-bot| pest_repors, weather_logs, Dashboard| Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard| 
+| F Riofrir | franklinriofrir16-bot| weather_logs, pest_reports| Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard| 
 
 
 
