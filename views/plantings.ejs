@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plantings Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; }
+        h1, h2 { color: #2e7d32; }
+        form.add-form { background: #fff; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        input, select { display: block; width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #45a049; }
+        .delete-btn { background-color: #e53935; }
+        .delete-btn:hover { background-color: #c62828; }
+        .edit-btn { background-color: #0288d1; text-decoration: none; color: white; padding: 8px 12px; border-radius: 4px; display: inline-block; font-size: 13px; font-weight: bold; }
+        .edit-btn:hover { background-color: #0277bd; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        a { display: inline-block; margin-bottom: 15px; text-decoration: none; color: #2e7d32; font-weight: bold; }
+        .actions { display: flex; gap: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Plantings Records</h1>
+    <a href="/">&larr; Back to Home</a>
+    
+    <form class="add-form" action="/plantings/add" method="POST">
+        <h2>Add New Planting</h2>
+        <input type="number" name="field_id" placeholder="Field ID" required>
+        <input type="number" name="crop_id" placeholder="Crop ID" required>
+        <input type="number" name="planted_by" placeholder="Planted By (User ID)" required>
+        <label>Planting Date:</label>
+        <input type="date" name="planting_date" required>
+        <label>Expected Harvest Date:</label>
+        <input type="date" name="expected_harvest_date">
+        <select name="status" required>
+            <option value="Active">Active</option>
+            <option value="Harvested">Harvested</option>
+            <option value="Failed">Failed</option>
+        </select>
+        <button type="submit">Add Planting</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Planting ID</th>
+                <th>Field ID</th>
+                <th>Crop ID</th>
+                <th>Planted By</th>
+                <th>Planting Date</th>
+                <th>Expected Harvest</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (plantings && plantings.length > 0) { %>
+                <% plantings.forEach(p => { %>
+                    <tr>
+                        <td><%= p.planting_id %></td>
+                        <td><%= p.field_id %></td>
+                        <td><%= p.crop_id %></td>
+                        <td><%= p.planted_by %></td>
+                        <td><%= p.planting_date %></td>
+                        <td><%= p.expected_harvest_date %></td>
+                        <td><%= p.status %></td>
+                        <td>
+                            <div class="actions">
+                                <a href="/plantings/edit/<%= p.planting_id %>" class="edit-btn">Edit</a>
+                                <form action="/plantings/delete/<%= p.planting_id %>" method="POST" onsubmit="return confirm('Delete this record?');">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="8" style="text-align: center;">No planting records found.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>
