@@ -19,7 +19,7 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 | A Pastrana | nicoledcaeley | roles, farms, users | Users CRUD, login | Users with role and farm (INNER) | Core: login, roles |
 | B Malingin | chrisbrowny05 | crops, fields, farm_inputs | Crops, fields, and farm inputs CRUD | Crops with fields (LEFT JOIN) | Crop and farm input management |
 | C Quisel | Galaxytamer | plantings, harvests, input_usage |Plantings CRUD screen, harvest and input usage entry |Plantings with crop, field and input totals (INNER) |Transactions |
-| D Rebutazo | | crop\_growth\_stages, crop\_thresholds, care\_tasks | | | |
+| D Rebutazo | junalynjuly | crop_growth_stages, crop_thresholds, care_tasks | Care Tasks CRUD screen, Growth Stages screen, Thresholds screen | Current stage per planting (INNER JOIN) | Unique FeatureRules; Stage advancement, Harvest prediction |
 | E Rio | | sensor\_readings, alerts, audit\_logs | | | |
 | F Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
 
