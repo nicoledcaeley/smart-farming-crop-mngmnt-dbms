@@ -24,7 +24,7 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 
 | C Quisel | Galaxytamer | plantings, harvests, input_usage |Plantings CRUD screen, harvest and input usage entry |Plantings with crop, field and input totals (INNER) |Transactions |
 
-| D Rebutazo | | crop\_growth\_stages, crop\_thresholds, care\_tasks | | | |
+| D Rebutazo |junalynjuly| crop_growth_stages, crop_thresholds, care_tasks| Care Tasks CRUD screen, Growth Stages screen, Thresholds screen| Current stage per planting (INNER JOIN)| Unique Feature(Rules); Stage advancement, Harvest prediction|
 
 | E Rio | | sensor\_readings, alerts, audit\_logs | | | |
 
