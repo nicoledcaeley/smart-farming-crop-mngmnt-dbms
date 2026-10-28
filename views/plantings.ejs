@@ -6,18 +6,16 @@
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; }
         h1, h2 { color: #2e7d32; }
         form.add-form { background: #fff; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; }
-        input, select { display: block; width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #4CAF50; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        label { font-weight: bold; margin-top: 8px; display: block; font-size: 13px; }
+        input, select { display: block; width: 100%; padding: 8px; margin-top: 4px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
         button:hover { background-color: #45a049; }
-        .delete-btn { background-color: #e53935; }
+        .delete-btn { background-color: #e53935; width: auto; padding: 6px 10px; }
         .delete-btn:hover { background-color: #c62828; }
-        .edit-btn { background-color: #0288d1; text-decoration: none; color: white; padding: 8px 12px; border-radius: 4px; display: inline-block; font-size: 13px; font-weight: bold; }
-        .edit-btn:hover { background-color: #0277bd; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; font-size: 13px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #4CAF50; color: white; }
         a { display: inline-block; margin-bottom: 15px; text-decoration: none; color: #2e7d32; font-weight: bold; }
-        .actions { display: flex; gap: 5px; }
     </style>
 </head>
 <body>
@@ -25,33 +23,51 @@
     <a href="/">&larr; Back to Home</a>
     
     <form class="add-form" action="/plantings/add" method="POST">
-        <h2>Add New Planting</h2>
-        <input type="number" name="field_id" placeholder="Field ID" required>
-        <input type="number" name="crop_id" placeholder="Crop ID" required>
-        <input type="number" name="planted_by" placeholder="Planted By (User ID)" required>
+        <h2>Add New Planting (Transactional)</h2>
+        
+        <label>Select Idle Field:</label>
+        <select name="field_id" required>
+            <option value="">-- Choose Idle Field --</option>
+            <% if (idleFields && idleFields.length > 0) { %>
+                <% idleFields.forEach(f => { %>
+                    <option value="<%= f.field_id %>"><%= f.field_name || ('Field #' + f.field_id) %></option>
+                <% }) %>
+            <% } else { %>
+                <option value="" disabled>No idle fields available</option>
+            <% } %>
+        </select>
+
+        <label>Select Crop:</label>
+        <select name="crop_id" required>
+            <option value="">-- Choose Crop --</option>
+            <% if (crops && crops.length > 0) { %>
+                <% crops.forEach(c => { %>
+                    <option value="<%= c.crop_id %>"><%= c.crop_name %> (Maturity: <%= c.days_to_maturity %> days)</option>
+                <% }) %>
+            <% } %>
+        </select>
+
+        <label>Planted By (User ID):</label>
+        <input type="number" name="planted_by" placeholder="Enter User ID" required>
+
         <label>Planting Date:</label>
         <input type="date" name="planting_date" required>
-        <label>Expected Harvest Date:</label>
-        <input type="date" name="expected_harvest_date">
-        <select name="status" required>
-            <option value="Active">Active</option>
-            <option value="Harvested">Harvested</option>
-            <option value="Failed">Failed</option>
-        </select>
-        <button type="submit">Add Planting</button>
+        <small style="color: #666;">* Expected harvest date is calculated automatically using crop maturity days.</small>
+
+        <button type="submit">Add Planting & Update Field Status</button>
     </form>
 
     <table>
         <thead>
             <tr>
-                <th>Planting ID</th>
-                <th>Field ID</th>
-                <th>Crop ID</th>
-                <th>Planted By</th>
+                <th>ID</th>
+                <th>Field</th>
+                <th>Crop</th>
+                <th>User</th>
                 <th>Planting Date</th>
                 <th>Expected Harvest</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -59,19 +75,16 @@
                 <% plantings.forEach(p => { %>
                     <tr>
                         <td><%= p.planting_id %></td>
-                        <td><%= p.field_id %></td>
-                        <td><%= p.crop_id %></td>
+                        <td><%= p.field_name || p.field_id %></td>
+                        <td><%= p.crop_name || p.crop_id %></td>
                         <td><%= p.planted_by %></td>
                         <td><%= p.planting_date %></td>
                         <td><%= p.expected_harvest_date %></td>
                         <td><%= p.status %></td>
                         <td>
-                            <div class="actions">
-                                <a href="/plantings/edit/<%= p.planting_id %>" class="edit-btn">Edit</a>
-                                <form action="/plantings/delete/<%= p.planting_id %>" method="POST" onsubmit="return confirm('Delete this record?');">
-                                    <button type="submit" class="delete-btn">Delete</button>
-                                </form>
-                            </div>
+                            <form action="/plantings/delete/<%= p.planting_id %>" method="POST" onsubmit="return confirm('Delete planting and set field back to Idle?');" style="margin:0;">
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 <% }) %>
