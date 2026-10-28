@@ -24,21 +24,21 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 
 | C Quisel | Galaxytamer | plantings, harvests, input_usage |Plantings CRUD screen, harvest and input usage entry |Plantings with crop, field and input totals (INNER) |Transactions |
 
-| D Rebutazo | | crop\_growth\_stages, crop\_thresholds, care\_tasks | | | |
+| D Rebutazo | | crop\_growth\_stages, 
+| crop\_thresholds, care\tasks
 
-| E Rio | | sensor\_readings, alerts, audit\_logs | | | |
+| E Rio|carmelario08|sensor_readings,alerts,audit_logs|Alerts CRUD screen,sensor readings entry,audit log view|Fields vs weather coverage gaps(FULL OUTER JOIN via UNION of LEFT and RIGHT)|Unique feature:threshold alerts and auto created tasks,audit|
 
-| F Riofrir | franklinriofrir16-bot| pest_repors, weather_logs, Dashboard| Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard| 
+| F Riofrir | franklinriofrir16-bot| 
+| pest_repors, weather_logs, Dashboard| 
+| Pest_report CRUD screen, weather_logs entry, 
+| Dashboard | Pest report count per crop (RIGHT 
+| JOIN) | Reports and Dash
 
+\## Tech Stack
 
-
-\## Tech stack
-
-
-
-\- Database: MySQL 8.0.16
-
-\- Backend: Node.js + Express with EJS pages
+\- Database: MySQL 8.0.16 \- Backend: Node.js + 
+Express with EJS pages
 
 \- DB driver: mysql2
 
@@ -53,4 +53,8 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 2\. Copy `.env.example` to `.env` and fill in your own values.
 
 3\. Run `npm install`, then `npm start`.
+
+
+
+
 
