@@ -21,7 +21,7 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 | C Quisel | Galaxytamer | plantings, harvests, input_usage |Plantings CRUD screen, harvest and input usage entry |Plantings with crop, field and input totals (INNER) |Transactions |
 | D Rebutazo | | crop\_growth\_stages, crop\_thresholds, care\_tasks | | | |
 | E Rio | | sensor\_readings, alerts, audit\_logs | | | |
-| F Riofrir | | weather\_logs, pest\_reports | | | |
+| F Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
 
 
 
