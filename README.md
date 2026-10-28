@@ -9,25 +9,18 @@
 Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 
 
-
-\## Ownership matrix
+## Ownership matrix
 
 
 
 | Member | GitHub username | Tables | Endpoints / screens | Join report(s) and join type | Feature role |
 
 |---|---|---|---|---|---|
-
 | A Pastrana | nicoledcaeley | roles, farms, users | Users CRUD, login | Users with role and farm (INNER) | Core: login, roles |
-
-| B Malingin | | crops, fields, farm\_inputs | | | |
-
+| B Malingin | chrisbrowny05 | crops, fields, farm_inputs | Crops, fields, and farm inputs CRUD | Crops with fields (LEFT JOIN) | Crop and farm input management |
 | C Quisel | Galaxytamer | plantings, harvests, input_usage |Plantings CRUD screen, harvest and input usage entry |Plantings with crop, field and input totals (INNER) |Transactions |
-
 | D Rebutazo | | crop\_growth\_stages, crop\_thresholds, care\_tasks | | | |
-
 | E Rio | | sensor\_readings, alerts, audit\_logs | | | |
-
 | F Riofrir | | weather\_logs, pest\_reports | | | |
 
 
