@@ -23,15 +23,10 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 | E Rio | | sensor\_readings, alerts, audit\_logs | | | |
 | F Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
 
+\## Tech Stack
 
-
-\## Tech stack
-
-
-
-\- Database: MySQL 8.0.16
-
-\- Backend: Node.js + Express with EJS pages
+\- Database: MySQL 8.0.16 \- Backend: Node.js + 
+Express with EJS pages
 
 \- DB driver: mysql2
 
@@ -46,4 +41,8 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 2\. Copy `.env.example` to `.env` and fill in your own values.
 
 3\. Run `npm install`, then `npm start`.
+
+
+
+
 
