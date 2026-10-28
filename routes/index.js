@@ -3,107 +3,71 @@ const router = express.Router();
 const pool = require('../config/db');
 
 router.get('/', async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM roles');
-        res.render('index', { roles: rows });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Database error');
-    }
+    res.render('index');
 });
 
-// Plantings List with Joins, Crops, and ONLY Idle Fields
 router.get('/plantings', async (req, res) => {
     try {
         const [plantings] = await pool.query(`
-            SELECT p.*, c.crop_name, f.field_name 
+            SELECT p.planting_id, f.field_name, c.crop_name,  
+                   DATE_FORMAT(p.planting_date, '%Y-%m-%d') AS planting_date, 
+                   DATE_FORMAT(p.expected_harvest_date, '%Y-%m-%d') AS expected_harvest_date, 
+                   p.status 
             FROM plantings p
-            JOIN crops c ON p.crop_id = c.crop_id
             JOIN fields f ON p.field_id = f.field_id
+            JOIN crops c ON p.crop_id = c.crop_id
         `);
-        const [crops] = await pool.query('SELECT crop_id, crop_name, days_to_maturity FROM crops');
-        
-        // Strict Requirement: Dropdown only includes IDLE fields (no active plantings)
-        const [idleFields] = await pool.query(`
-            SELECT * FROM fields 
-            WHERE field_id NOT IN (
-                SELECT field_id FROM plantings WHERE status = 'Active'
-            )
-        `);
-        
-        res.render('plantings', { plantings, crops, idleFields });
+        const [idleFields] = await pool.query("SELECT * FROM fields WHERE status = 'Idle'");
+        const [crops] = await pool.query('SELECT * FROM crops');
+        res.render('plantings', { plantings, idleFields, crops });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error loading plantings: ' + err.message);
+        res.status(500).send(err.message);
     }
 });
 
-// Add Planting: Transaction + Calculated Expected Harvest Date + Field Status Update
-router.post('/plantings/add', async (req, res) => {
-    const connection = await pool.getConnection();
+router.get('/harvests', async (req, res) => {
     try {
-        await connection.beginTransaction();
-
-        const { field_id, crop_id, planted_by, planting_date } = req.body;
-
-        // Calculate expected harvest date in code: planting_date + days_to_maturity
-        const [cropRows] = await connection.query('SELECT days_to_maturity FROM crops WHERE crop_id = ?', [crop_id]);
-        if (cropRows.length === 0) throw new Error('Crop not found');
-        
-        const daysToMaturity = cropRows[0].days_to_maturity || 0;
-        const pDate = new Date(planting_date);
-        pDate.setDate(pDate.getDate() + daysToMaturity);
-        const expected_harvest_date = pDate.toISOString().split('T')[0];
-
-        // 1. Insert the planting record
-        await connection.query(
-            'INSERT INTO plantings (field_id, crop_id, planted_by, planting_date, expected_harvest_date, status) VALUES (?, ?, ?, ?, ?, ?)',
-            [field_id, crop_id, planted_by, planting_date, expected_harvest_date, 'Active']
-        );
-
-        // 2. Update field status to 'Planted' in the SAME transaction
-        await connection.query('UPDATE fields SET status = ? WHERE field_id = ?', ['Planted', field_id]);
-
-        await connection.commit();
-        connection.release();
-        res.redirect('/plantings');
+        const [harvests] = await pool.query(`
+            SELECT harvest_id, planting_id, DATE_FORMAT(harvest_date, '%Y-%m-%d') AS harvest_date, quantity_kg AS yield_qty 
+            FROM harvests
+        `);
+        const [activePlantings] = await pool.query(`
+            SELECT p.planting_id, f.field_name, c.crop_name 
+            FROM plantings p
+            JOIN fields f ON p.field_id = f.field_id
+            JOIN crops c ON p.crop_id = c.crop_id
+            WHERE p.status = 'Active'
+        `);
+        res.render('harvests', { harvests, activePlantings });
     } catch (err) {
-        await connection.rollback();
-        connection.release();
-        console.error(err);
-        res.status(500).send('Transaction error: ' + err.message);
+        res.status(500).send(err.message);
     }
 });
 
-// Delete Planting: Transaction (Resets field status back to 'Idle')
-router.post('/plantings/delete/:id', async (req, res) => {
-    const connection = await pool.getConnection();
+router.get('/input-usage', async (req, res) => {
     try {
-        await connection.beginTransaction();
-        const { id } = req.params;
-
-        const [rows] = await connection.query('SELECT field_id, status FROM plantings WHERE planting_id = ?', [id]);
-        if (rows.length === 0) throw new Error('Planting record not found');
-        
-        const { field_id, status } = rows[0];
-
-        // Delete planting record
-        await connection.query('DELETE FROM plantings WHERE planting_id = ?', [id]);
-
-        // If it was Active, set the field back to 'Idle'
-        if (status === 'Active') {
-            await connection.query('UPDATE fields SET status = ? WHERE field_id = ?', ['Idle', field_id]);
-        }
-
-        await connection.commit();
-        connection.release();
-        res.redirect('/plantings');
+        const [usageRecords] = await pool.query(`
+            SELECT u.usage_id, u.planting_id, i.input_name, u.quantity_used, 
+                   DATE_FORMAT(u.usage_date, '%Y-%m-%d') AS date_used 
+            FROM input_usage u
+            JOIN farm_inputs i ON u.input_id = i.input_id
+        `);
+        const [plantings] = await pool.query(`
+            SELECT p.planting_id, f.field_name, c.crop_name 
+            FROM plantings p
+            JOIN fields f ON p.field_id = f.field_id
+            JOIN crops c ON p.crop_id = c.crop_id
+        `);
+        const [farmInputs] = await pool.query('SELECT * FROM farm_inputs');
+        res.render('input_usage', { usageRecords, plantings, farmInputs });
     } catch (err) {
-        await connection.rollback();
-        connection.release();
-        console.error(err);
-        res.status(500).send('Error deleting planting: ' + err.message);
+        res.status(500).send(err.message);
     }
+});
+
+// Fallback alias in case templates point to /user-input
+router.get('/user-input', (req, res) => {
+    res.redirect('/input-usage');
 });
 
 module.exports = router;
