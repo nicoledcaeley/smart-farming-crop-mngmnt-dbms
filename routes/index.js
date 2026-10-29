@@ -7,7 +7,12 @@ const bcrypt = require('bcrypt');
 router.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
+
 router.get('/', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+
     try {
         const [rows] = await pool.query('SELECT * FROM roles');
         res.render('index', { roles: rows });
@@ -16,6 +21,7 @@ router.get('/', async (req, res) => {
         res.status(500).send('Database error');
     }
 });
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -57,6 +63,17 @@ router.post('/login', async (req, res) => {
         console.error(err);
         res.status(500).send('Something went wrong. Please try again.');
     }
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Could not log out.');
+        }
+
+        res.redirect('/login');
+    });
 });
 
 module.exports = router;
