@@ -9,6 +9,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', require('./routes/index'));
+app.use('/growth-stages', require('./routes/growth-stages')); 
 
 app.use('/readings', require('./routes/readings'));
 app.use('/alerts', require('./routes/alerts'));
