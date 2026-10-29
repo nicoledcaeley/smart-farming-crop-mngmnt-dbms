@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users | Smart Farming</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f2;
+            margin: 0;
+            padding: 30px;
+            color: #26352a;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #28643b;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #28643b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #28643b;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f0f7f0;
+        }
+
+        .active {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <a class="back-link" href="/">← Back to Home</a>
+
+        <h1>User Management</h1>
+        <p>View registered users, their roles, farms, and account status.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Farm</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (users.length === 0) { %>
+                    <tr>
+                        <td colspan="6">No users found.</td>
+                    </tr>
+                <% } %>
+
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.user_id %></td>
+                        <td><%= user.full_name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.role_name %></td>
+                        <td><%= user.farm_name || 'Not assigned' %></td>
+                        <td class="<%= user.is_active ? 'active' : 'inactive' %>">
+                            <%= user.is_active ? 'Active' : 'Inactive' %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
