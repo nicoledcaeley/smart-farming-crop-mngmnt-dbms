@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require('express');
 
@@ -10,6 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/pestWeather'));
+app.use('/fields', require('./routes/fields'));
 
 const PORT = process.env.PORT || 3000;
 
