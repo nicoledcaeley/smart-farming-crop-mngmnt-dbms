@@ -19,6 +19,7 @@ app.use(session({
 }));
 app.use('/', require('./routes/index'));
 app.use('/growth-stages', require('./routes/growth-stages')); 
+app.use('/thresholds', require('./routes/thresholds'));
 
 app.use('/readings', require('./routes/readings'));
 app.use('/alerts', require('./routes/alerts'));

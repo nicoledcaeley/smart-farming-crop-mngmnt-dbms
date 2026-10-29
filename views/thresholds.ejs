@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crop Thresholds</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Crop Thresholds</h1>
+    <p>Manage the minimum and maximum values for each crop metric.</p>
+
+    <p><a href="/">Back to Home</a></p>
+
+    <h2>Add Crop Threshold</h2>
+
+    <form action="/thresholds" method="POST">
+        <label for="crop_id">Crop:</label>
+        <select name="crop_id" id="crop_id" required>
+            <option value="">Select a crop</option>
+            <% crops.forEach(function(crop) { %>
+                <option value="<%= crop.crop_id %>">
+                    <%= crop.crop_name %>
+                </option>
+            <% }); %>
+        </select>
+
+        <label for="metric">Metric:</label>
+        <select name="metric" id="metric" required>
+            <option value="">Select a metric</option>
+            <option value="soil_moisture">Soil Moisture</option>
+            <option value="temperature">Temperature</option>
+            <option value="ph">pH</option>
+        </select>
+
+        <label for="min_value">Minimum Value:</label>
+        <input
+            type="number"
+            id="min_value"
+            name="min_value"
+            step="0.01"
+            required
+        >
+
+        <label for="max_value">Maximum Value:</label>
+        <input
+            type="number"
+            id="max_value"
+            name="max_value"
+            step="0.01"
+            required
+        >
+
+        <button type="submit">Add Threshold</button>
+    </form>
+
+    <h2>Existing Crop Thresholds</h2>
+
+    <table>
+        <tr>
+            <th>Crop</th>
+            <th>Metric</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+        </tr>
+
+        <% thresholds.forEach(function(threshold) { %>
+            <tr>
+                <td><%= threshold.crop_name %></td>
+                <td><%= threshold.metric %></td>
+                <td><%= threshold.min_value %></td>
+                <td><%= threshold.max_value %></td>
+            </tr>
+        <% }); %>
+    </table>
+</body>
+</html>
