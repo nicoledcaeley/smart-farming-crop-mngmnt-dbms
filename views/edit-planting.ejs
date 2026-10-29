@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Planting</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; }
+        h2 { color: #2e7d32; }
+        form { background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 5px; max-width: 500px; }
+        input, select { display: block; width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #45a049; }
+        a { display: inline-block; margin-top: 15px; text-decoration: none; color: #2e7d32; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Edit Planting Record #<%= planting.planting_id %></h2>
+    <form action="/plantings/update/<%= planting.planting_id %>" method="POST">
+        <label>Field ID:</label>
+        <input type="number" name="field_id" value="<%= planting.field_id %>" required>
+        
+        <label>Crop ID:</label>
+        <input type="number" name="crop_id" value="<%= planting.crop_id %>" required>
+        
+        <label>Planted By (User ID):</label>
+        <input type="number" name="planted_by" value="<%= planting.planted_by %>" required>
+        
+        <label>Planting Date:</label>
+        <input type="date" name="planting_date" value="<%= planting.planting_date ? planting.planting_date.toISOString().split('T')[0] : '' %>" required>
+        
+        <label>Expected Harvest Date:</label>
+        <input type="date" name="expected_harvest_date" value="<%= planting.expected_harvest_date ? planting.expected_harvest_date.toISOString().split('T')[0] : '' %>">
+        
+        <label>Status:</label>
+        <select name="status" required>
+            <option value="Active" <%= planting.status === 'Active' ? 'selected' : '' %>>Active</option>
+            <option value="Harvested" <%= planting.status === 'Harvested' ? 'selected' : '' %>>Harvested</option>
+            <option value="Failed" <%= planting.status === 'Failed' ? 'selected' : '' %>>Failed</option>
+        </select>
+        
+        <button type="submit">Update Planting</button>
+    </form>
+    <a href="/plantings">&larr; Back to Plantings</a>
+</body>
+</html>

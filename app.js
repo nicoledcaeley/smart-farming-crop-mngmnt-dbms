@@ -9,8 +9,13 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', require('./routes/index'));
+
 app.use('/readings', require('./routes/readings'));
 app.use('/alerts', require('./routes/alerts'));
+
+app.use('/', require('./routes/pestWeather'));
+
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
