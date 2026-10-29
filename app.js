@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', require('./routes/index'));
 app.use('/growth-stages', require('./routes/growth-stages')); 
 app.use('/thresholds', require('./routes/thresholds'));
+app.use('/care-tasks', require('./routes/care-tasks'));
 
 const PORT = process.env.PORT || 3000;
 
