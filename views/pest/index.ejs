@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pest Reports Management</title>
+</head>
+<body>
+  <h1>Pest Reports Management</h1>
+  <nav><a href="/dashboard">Dashboard</a> | <a href="/weather-logs">Weather Logs</a></nav>
+
+  <h3>Log New Pest Incident</h3>
+  <form action="/pest-reports/add" method="POST">
+    <label>Planting / Crop Location:</label>
+    <select name="planting_id" required>
+      <% plantings.forEach(p => { %>
+        <option value="<%= p.planting_id %>"><%= p.crop_name %> (Field: <%= p.field_name %>)</option>
+      <% }) %>
+    </select><br><br>
+
+    <label>Pest Name:</label>
+    <input type="text" name="pest_name" placeholder="e.g. Stem Borer" required><br><br>
+
+    <label>Severity Level:</label>
+    <select name="severity" required>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+      <option value="Critical">Critical</option>
+    </select><br><br>
+
+    <label>Date:</label>
+    <input type="date" name="report_date" required><br><br>
+
+    <label>Notes:</label>
+    <textarea name="notes" rows="3"></textarea><br><br>
+
+    <button type="submit">Add Report</button>
+  </form>
+
+  <h3>Existing Pest Reports</h3>
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Crop</th>
+        <th>Field</th>
+        <th>Pest Name</th>
+        <th>Severity</th>
+        <th>Report Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% reports.forEach(r => { %>
+        <tr>
+          <td><%= r.report_id %></td>
+          <td><%= r.crop_name %></td>
+          <td><%= r.field_name %></td>
+          <td><%= r.pest_name %></td>
+          <td><%= r.severity %></td>
+          <td><%= new Date(r.report_date).toLocaleDateString() %></td>
+          <td>
+            <form action="/pest-reports/delete/<%= r.report_id %>" method="POST" style="display:inline;">
+              <button type="submit" onclick="return confirm('Delete report?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

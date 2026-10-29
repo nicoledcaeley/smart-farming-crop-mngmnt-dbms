@@ -18,6 +18,13 @@ app.use(session({
     }
 }));
 app.use('/', require('./routes/index'));
+app.use('/growth-stages', require('./routes/growth-stages')); 
+
+app.use('/readings', require('./routes/readings'));
+app.use('/alerts', require('./routes/alerts'));
+
+app.use('/', require('./routes/pestWeather'));
+
 
 const PORT = process.env.PORT || 3000;
 
