@@ -76,4 +76,33 @@ router.get('/logout', (req, res) => {
     });
 });
 
+// Display all users with their roles and farms
+router.get('/users', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const [users] = await pool.query(`
+            SELECT
+                users.user_id,
+                users.full_name,
+                users.email,
+                roles.role_name,
+                farms.farm_name,
+                users.is_active
+            FROM users
+            INNER JOIN roles
+                ON users.role_id = roles.role_id
+            LEFT JOIN farms
+                ON users.farm_id = farms.farm_id
+            ORDER BY users.user_id
+        `);
+
+        res.render('users', { users });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error while loading users.');
+    }
+});
 module.exports = router;
