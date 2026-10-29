@@ -15,8 +15,8 @@ Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
 | B Malingin | chrisbrowny05 | crops, fields, farm_inputs | Fields CRUD screen, Crops screen, Farm inputs screen | Field with no active planting (LEFT JOIN) | Master Data |
 | C Quisel | Galaxytamer | plantings, harvests, input_usage | Plantings CRUD screen, harvest and input usage entry | Plantings with crop, field and input totals (INNER JOIN) | Transactions |
 | D Rebutazo | junalynjuly | crop_growth_stages, crop_thresholds, care_tasks | Care Tasks CRUD screen, Growth Stages screen, Thresholds screen | Current stage per planting (INNER JOIN) | Unique Feature Rules; stage advancement, harvest prediction |
-| E Rio |  | sensor_readings, alerts, audit_logs |  |  |  |
-| F Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
+| E Rio | carmelario08 | sensor_readings, alerts, audit_logs | Alerts CRUD screen, sensor readings entry, audit log view | Fields vs weather coverage gaps (FULL OUTER via UNION of LEFT and RIGHT) | Threshold alerts, auto-created tasks, audit |
+| F Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
 
 ## Tech Stack
 Express with EJS pages
