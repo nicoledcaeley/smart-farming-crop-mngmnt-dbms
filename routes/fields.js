@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
         res.render('fields', {
             fields,
             farms,
-            error: null
+            error: req.query.error || null
         });
     } catch (err) {
         console.error(err);
@@ -149,14 +149,38 @@ router.post('/:id/delete', async (req, res) => {
     const { id } = req.params;
 
     try {
+        // Check if the field has existing planting records
+        const [plantings] = await pool.query(
+            'SELECT planting_id FROM plantings WHERE field_id = ? LIMIT 1',
+            [id]
+        );
+
+        // Prevent deletion if planting records exist
+        if (plantings.length > 0) {
+            return res.redirect(
+                '/fields?error=' +
+                encodeURIComponent('Cannot delete this field because it has existing planting records.')
+            );
+        }
+
+        // Delete field if no planting records exist
         await pool.query(
             'DELETE FROM fields WHERE field_id = ?',
             [id]
         );
 
         res.redirect('/fields');
+
     } catch (err) {
         console.error(err);
+
+        if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+            return res.redirect(
+                '/fields?error=' +
+                encodeURIComponent('Cannot delete this field because other records are still linked to it.')
+            );
+        }
+
         res.status(500).send('Unable to delete field.');
     }
 });
