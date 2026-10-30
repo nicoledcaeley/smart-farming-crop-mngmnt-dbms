@@ -21,6 +21,7 @@ app.use('/', require('./routes/index'));
 app.use('/growth-stages', require('./routes/growth-stages')); 
 app.use('/thresholds', require('./routes/thresholds'));
 app.use('/care-tasks', require('./routes/care-tasks'));
+app.use('/fields', require('./routes/fields'));
 
 app.use('/readings', require('./routes/readings'));
 app.use('/alerts', require('./routes/alerts'));
