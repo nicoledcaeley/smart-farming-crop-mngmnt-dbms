@@ -25,5 +25,8 @@
     "express": "^5.3.0",
     "express-session": "^1.19.0",
     "mysql2": "^3.24.6"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true
   }
 }
