@@ -138,10 +138,17 @@ router.post('/:id/update', async (req, res) => {
         );
 
         res.redirect('/fields');
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Unable to update field.');
+} catch (err) {
+    console.error(err);
+    if (err.code === 'ER_DUP_ENTRY') {
+        return res.redirect(
+            '/fields?error=' +
+            encodeURIComponent('A field with this name already exists for the selected farm.')
+        );
     }
+
+    res.status(500).send('Unable to update field.');
+}
 });
 
 // DELETE: Remove an existing field
