@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
             FROM plantings p
             INNER JOIN crops c
                 ON p.crop_id = c.crop_id
-            LEFT JOIN crop_growth_stages s
+            INNER JOIN crop_growth_stages s
                 ON p.current_stage_id = s.stage_id
             ORDER BY p.planting_id
         `);
