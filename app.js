@@ -25,6 +25,8 @@ app.use('/fields', require('./routes/fields'));
 app.use('/crops', require('./routes/crops'));
 app.use('/readings', require('./routes/readings'));
 app.use('/alerts', require('./routes/alerts'));
+app.use('/farm-inputs', require('./routes/farm-inputs')); 
+app.use('/reports/idle-fields', require('./routes/idle-fields')); 
 
 app.use('/', require('./routes/pestWeather'));
 
