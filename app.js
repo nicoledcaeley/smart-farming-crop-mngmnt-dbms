@@ -19,6 +19,9 @@ app.use(session({
         maxAge: 1000 * 60 * 60
     }
 }));
+app.use('/roles', require('./routes/roles'));
+app.use('/farms', require('./routes/farms'));
+
 app.use('/', require('./routes/index'));
 app.use('/growth-stages', require('./routes/growth-stages')); 
 app.use('/thresholds', require('./routes/thresholds'));
