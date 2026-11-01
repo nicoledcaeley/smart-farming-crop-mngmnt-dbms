@@ -30,6 +30,7 @@ app.use('/reports/idle-fields', require('./routes/idle-fields'));
 app.use('/reports/current-stage', require('./routes/current-stage'));
 
 app.use('/', require('./routes/pestWeather'));
+app.use('/', require('./routes/plantings'));
 app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
 

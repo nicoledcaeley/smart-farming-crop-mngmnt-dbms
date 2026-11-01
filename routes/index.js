@@ -24,31 +24,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Plantings
-router.get('/plantings', async (req, res) => {
-    try {
-        const [plantings] = await pool.query(`
-            SELECT p.planting_id, f.field_name, c.crop_name,
-                   DATE_FORMAT(p.planting_date, '%Y-%m-%d') AS planting_date,
-                   DATE_FORMAT(p.expected_harvest_date, '%Y-%m-%d') AS expected_harvest_date,
-                   p.status
-            FROM plantings p
-            JOIN fields f ON p.field_id = f.field_id
-            JOIN crops c ON p.crop_id = c.crop_id
-        `);
-
-        const [idleFields] = await pool.query(
-            "SELECT * FROM fields WHERE status = 'Idle'"
-        );
-        const [crops] = await pool.query('SELECT * FROM crops');
-
-        res.render('plantings', { plantings, idleFields, crops });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send(err.message);
-    }
-});
-
 // Login authentication
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
