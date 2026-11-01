@@ -390,10 +390,10 @@ router.get('/input-usage', async (req, res) => {
         const [farmInputs] = await pool.query('SELECT * FROM farm_inputs');
 
         res.render('input_usage', {
-            usageRecords,
-            plantings,
-            farmInputs
-        });
+        usages: usageRecords,
+        plantings,
+        farmInputs
+    });
     } catch (err) {
         console.error(err);
         res.status(500).send(err.message);
