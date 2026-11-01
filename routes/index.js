@@ -25,24 +25,6 @@ router.get('/plantings', async (req, res) => {
     }
 });
 
-router.get('/harvests', async (req, res) => {
-    try {
-        const [harvests] = await pool.query(`
-            SELECT harvest_id, planting_id, DATE_FORMAT(harvest_date, '%Y-%m-%d') AS harvest_date, quantity_kg AS yield_qty 
-            FROM harvests
-        `);
-        const [activePlantings] = await pool.query(`
-            SELECT p.planting_id, f.field_name, c.crop_name 
-            FROM plantings p
-            JOIN fields f ON p.field_id = f.field_id
-            JOIN crops c ON p.crop_id = c.crop_id
-            WHERE p.status = 'Active'
-        `);
-        res.render('harvests', { harvests, activePlantings });
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-});
 
 router.get('/input-usage', async (req, res) => {
     try {
