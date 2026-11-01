@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fields Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f3f7f1;
+            color: #243b2a;
+        }
+
+        h1, h2 {
+            color: #246b35;
+        }
+
+        form, table {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #dcebd8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fields Management</h1>
+
+    <p><a href="/">Back to Home</a></p>
+
+    <% if (error) { %>
+        <p style="color:red;"><%= error %></p>
+    <% } %>
+
+    <h2>Add a Field</h2>
+
+    <form action="/fields" method="POST">
+        <label for="farm_id">Farm</label>
+        <select id="farm_id" name="farm_id" required>
+            <option value="">Select a farm</option>
+            <% farms.forEach(farm => { %>
+                <option value="<%= farm.farm_id %>">
+                    <%= farm.farm_name %>
+                </option>
+            <% }) %>
+        </select>
+
+        <label for="field_name">Field Name</label>
+        <input id="field_name" name="field_name"
+               maxlength="80" required>
+
+        <label for="area_ha">Area (hectares)</label>
+        <input id="area_ha" name="area_ha"
+               type="number" min="0.01" max="999999.99"
+               step="0.01" required>
+
+        <label for="soil_type">Soil Type</label>
+        <select id="soil_type" name="soil_type" required>
+            <option value="">Select soil type</option>
+            <option>Clay</option>
+            <option>Loam</option>
+            <option>Sandy</option>
+            <option>Sandy loam</option>
+            <option>Silt</option>
+        </select>
+
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+            <option>Idle</option>
+            <option>Planted</option>
+            <option>Fallow</option>
+        </select>
+
+        <button type="submit">Add Field</button>
+    </form>
+
+    <h2>Existing Fields</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Field</th>
+                <th>Farm</th>
+                <th>Area (ha)</th>
+                <th>Soil</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% fields.forEach(field => { %>
+                <tr>
+                    <td><%= field.field_id %></td>
+                    <td><%= field.field_name %></td>
+                    <td><%= field.farm_name %></td>
+                    <td><%= field.area_ha %></td>
+                    <td><%= field.soil_type %></td>
+                    <td><%= field.status %></td>
+<td>
+    <button type="button"
+            onclick="document.getElementById('edit-<%= field.field_id %>').hidden = !document.getElementById('edit-<%= field.field_id %>').hidden">
+        Edit
+    </button>
+
+    <form action="/fields/<%= field.field_id %>/delete"
+          method="POST"
+          onsubmit="return confirm('Delete this field?');">
+        <button type="submit">Delete</button>
+    </form>
+</td>
+                </tr>
+                <tr id="edit-<%= field.field_id %>" hidden>
+    <td colspan="7">
+        <form action="/fields/<%= field.field_id %>/update" method="POST">
+            <label>Farm</label>
+            <select name="farm_id" required>
+                <% farms.forEach(farm => { %>
+                    <option value="<%= farm.farm_id %>"
+                        <%= farm.farm_id === field.farm_id ? 'selected' : '' %>>
+                        <%= farm.farm_name %>
+                    </option>
+                <% }) %>
+            </select>
+
+            <label>Field Name</label>
+            <input name="field_name" value="<%= field.field_name %>"
+                   maxlength="80" required>
+
+            <label>Area (hectares)</label>
+            <input name="area_ha" type="number" min="0.01"
+                   max="999999.99" step="0.01"
+                   value="<%= field.area_ha %>" required>
+
+            <label>Soil Type</label>
+            <select name="soil_type" required>
+                <% ['Clay', 'Loam', 'Sandy', 'Sandy loam', 'Silt'].forEach(soil => { %>
+                    <option value="<%= soil %>"
+                        <%= soil === field.soil_type ? 'selected' : '' %>>
+                        <%= soil %>
+                    </option>
+                <% }) %>
+            </select>
+
+            <label>Status</label>
+            <select name="status" required>
+                <% ['Idle', 'Planted', 'Fallow'].forEach(s => { %>
+                    <option value="<%= s %>"
+                        <%= s === field.status ? 'selected' : '' %>>
+                        <%= s %>
+                    </option>
+                <% }) %>
+            </select>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </td>
+</tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

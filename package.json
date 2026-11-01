@@ -4,8 +4,8 @@
   "description": "Smart Farming and Crop Management System (DBMS 1)",
   "main": "app.js",
   "scripts": {
-     "start": "node app.js"
-   },
+    "start": "node app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicoledcaeley/smart-farming-crop-mngmnt-dbms.git"
@@ -19,9 +19,14 @@
   },
   "homepage": "https://github.com/nicoledcaeley/smart-farming-crop-mngmnt-dbms#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^18.0.9",
     "ejs": "^7.0.2",
     "express": "^5.3.0",
+    "express-session": "^1.19.0",
     "mysql2": "^3.24.6"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true
   }
 }

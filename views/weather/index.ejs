@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Logs Entry</title>
+</head>
+<body>
+  <h1>Weather Logs</h1>
+  <nav><a href="/dashboard">Dashboard</a> | <a href="/pest-reports">Pest Reports</a></nav>
+
+  <h3>Record Daily Weather Reading</h3>
+  <form action="/weather-logs/add" method="POST">
+    <label>Target Field:</label>
+    <select name="field_id" required>
+      <% fields.forEach(f => { %>
+        <option value="<%= f.field_id %>"><%= f.field_name %></option>
+      <% }) %>
+    </select><br><br>
+
+    <label>Temperature (°C):</label>
+    <input type="number" step="0.1" name="temperature" required><br><br>
+
+    <label>Humidity (%):</label>
+    <input type="number" step="0.1" name="humidity" required><br><br>
+
+    <label>Rainfall (mm):</label>
+    <input type="number" step="0.1" name="rainfall" required><br><br>
+
+    <label>Log Date:</label>
+    <input type="date" name="log_date" required><br><br>
+
+    <button type="submit">Save Log</button>
+  </form>
+
+  <h3>Recorded Weather Logs</h3>
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>Log ID</th>
+        <th>Field</th>
+        <th>Temp (°C)</th>
+        <th>Humidity (%)</th>
+        <th>Rainfall (mm)</th>
+        <th>Log Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% logs.forEach(l => { %>
+        <tr>
+          <td><%= l.log_id %></td>
+          <td><%= l.field_name %></td>
+          <td><%= l.temperature %></td>
+          <td><%= l.humidity %></td>
+          <td><%= l.rainfall %></td>
+          <td><%= new Date(l.log_date).toLocaleDateString() %></td>
+          <td>
+            <form action="/weather-logs/delete/<%= l.log_id %>" method="POST" style="display:inline;">
+              <button type="submit" onclick="return confirm('Delete entry?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
