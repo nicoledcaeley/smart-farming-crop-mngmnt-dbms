@@ -39,6 +39,7 @@ app.use('/', require('./routes/pestWeather'));
 app.use('/', require('./routes/plantings'));
 app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
+app.use('/reports/planting-inputs', require('./routes/planting-inputs'));
 
 // Automatically update growth stages
 async function runStageAdvancement() {
