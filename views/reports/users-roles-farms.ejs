@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users, Roles, and Farms Report</title>
+</head>
+<body>
+
+    <h1>Users, Roles, and Farms Report</h1>
+
+    <p>List of users, their assigned roles, and farms.</p>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Farm</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% report.forEach(user => { %>
+                <tr>
+                    <td><%= user.user_id %></td>
+                    <td><%= user.full_name %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.role_name %></td>
+                    <td><%= user.farm_name || 'Not Assigned' %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/users">Back to Users</a>
+
+</body>
+</html>

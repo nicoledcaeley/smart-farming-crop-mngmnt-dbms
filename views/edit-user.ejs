@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User | Smart Farming</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f2;
+            padding: 30px;
+            color: #26352a;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h1 { color: #28643b; }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #28643b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        a { color: #28643b; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <a href="/users">← Back to Users</a>
+
+        <h1>Edit User</h1>
+
+        <form action="/users/edit/<%= user.user_id %>" method="POST">
+            <label>Full Name:</label>
+            <input
+                type="text"
+                name="full_name"
+                value="<%= user.full_name %>"
+                required
+                minlength="2"
+            >
+
+            <label>Email:</label>
+            <input
+                type="email"
+                name="email"
+                value="<%= user.email %>"
+                required
+            >
+
+            <label>Role:</label>
+            <select name="role_id" required>
+                <% roles.forEach(role => { %>
+                    <option
+                        value="<%= role.role_id %>"
+                        <%= Number(user.role_id) === Number(role.role_id) ? 'selected' : '' %>
+                    >
+                        <%= role.role_name %>
+                    </option>
+                <% }); %>
+            </select>
+
+            <label>Farm:</label>
+            <select name="farm_id">
+                <option value="">No Farm Assigned</option>
+
+                <% farms.forEach(farm => { %>
+                    <option
+                        value="<%= farm.farm_id %>"
+                        <%= Number(user.farm_id) === Number(farm.farm_id) ? 'selected' : '' %>
+                    >
+                        <%= farm.farm_name %>
+                    </option>
+                <% }); %>
+            </select>
+
+            <label>Account Status:</label>
+            <select name="is_active" required>
+                <option value="1" <%= user.is_active ? 'selected' : '' %>>
+                    Active
+                </option>
+                <option value="0" <%= !user.is_active ? 'selected' : '' %>>
+                    Inactive
+                </option>
+            </select>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </main>
+</body>
+</html>

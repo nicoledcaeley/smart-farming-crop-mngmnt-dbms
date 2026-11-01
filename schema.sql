@@ -340,74 +340,8 @@ INSERT INTO pest_reports (planting_id, reported_by, pest_name, severity, reporte
  (3, 4, 'Aphids',         'Low',    '2026-10-25', 'Monitoring',                 'Open');
 -- planting 4 (harvested corn) has no pest report on purpose.
 
--- =====================================================================
--- VIEW used by the FULL OUTER JOIN report (sensor activity per farm per day)
--- =====================================================================
-
 CREATE VIEW v_sensor_days AS
 SELECT f.farm_id, DATE(sr.reading_time) AS day, COUNT(*) AS readings
 FROM sensor_readings sr
 INNER JOIN fields f ON f.field_id = sr.field_id
 GROUP BY f.farm_id, DATE(sr.reading_time);
-
--- =====================================================================
--- SAMPLE JOIN REPORTS. Run them one at a time to check the data.
--- Remove the comment markers to try a query. Adapt them into your own code.
--- =====================================================================
-
-/*
--- A (INNER): users with their role and farm
-SELECT u.full_name, r.role_name, fm.farm_name
-FROM users u
-INNER JOIN roles r  ON r.role_id = u.role_id
-LEFT  JOIN farms fm ON fm.farm_id = u.farm_id;   -- admin/agronomist have no farm
-
--- B (LEFT): fields with no active planting
-SELECT f.field_name, f.status
-FROM fields f
-LEFT JOIN plantings p ON p.field_id = f.field_id AND p.status = 'Active'
-WHERE p.planting_id IS NULL;
-
--- C (INNER): plantings with crop, field and total inputs used
-SELECT p.planting_id, c.crop_name, f.field_name, p.planting_date,
-       COALESCE(SUM(iu.quantity_used), 0) AS total_input_used
-FROM plantings p
-INNER JOIN crops  c ON c.crop_id  = p.crop_id
-INNER JOIN fields f ON f.field_id = p.field_id
-LEFT  JOIN input_usage iu ON iu.planting_id = p.planting_id
-GROUP BY p.planting_id, c.crop_name, f.field_name, p.planting_date;
-
--- D (LEFT): crops that still have no growth stages defined
-SELECT c.crop_name
-FROM crops c
-LEFT JOIN crop_growth_stages s ON s.crop_id = c.crop_id
-WHERE s.stage_id IS NULL;
-
--- D (INNER): current stage and days since planting for each active planting
-SELECT p.planting_id, c.crop_name, s.stage_name,
-       DATEDIFF('2026-10-28', p.planting_date) AS days_since_planting,
-       p.expected_harvest_date
-FROM plantings p
-INNER JOIN crops c ON c.crop_id = p.crop_id
-INNER JOIN crop_growth_stages s ON s.stage_id = p.current_stage_id
-WHERE p.status = 'Active';
-
--- E (FULL OUTER via UNION of LEFT and RIGHT; MySQL has no FULL OUTER JOIN):
--- days with sensor readings vs days with weather logs, per farm
-SELECT s.farm_id, s.day AS day_value, s.readings, w.rainfall_mm
-FROM v_sensor_days s
-LEFT JOIN weather_logs w ON w.farm_id = s.farm_id AND w.log_date = s.day
-UNION
-SELECT w.farm_id, w.log_date, s.readings, w.rainfall_mm
-FROM v_sensor_days s
-RIGHT JOIN weather_logs w ON w.farm_id = s.farm_id AND w.log_date = s.day;
-
--- F (RIGHT): pest report count per crop, including plantings with no pests
-SELECT c.crop_name,
-       COUNT(DISTINCT p.planting_id) AS plantings,
-       COUNT(pr.pest_id)             AS pest_reports
-FROM pest_reports pr
-RIGHT JOIN plantings p ON p.planting_id = pr.planting_id
-INNER JOIN crops c     ON c.crop_id = p.crop_id
-GROUP BY c.crop_id, c.crop_name;
-*/
