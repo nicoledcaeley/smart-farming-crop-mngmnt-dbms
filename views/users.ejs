@@ -70,7 +70,40 @@
 
         <h1>User Management</h1>
         <p>View registered users, their roles, farms, and account status.</p>
+        <h2>Add New User</h2>
 
+<form action="/users" method="POST">
+    <label>Full Name:</label>
+    <input type="text" name="full_name" required minlength="2">
+
+    <label>Email:</label>
+    <input type="email" name="email" required>
+
+    <label>Password:</label>
+    <input type="password" name="password" required minlength="8">
+
+    <label>Role:</label>
+    <select name="role_id" required>
+        <option value="">Select Role</option>
+        <% roles.forEach(role => { %>
+            <option value="<%= role.role_id %>">
+                <%= role.role_name %>
+            </option>
+        <% }); %>
+    </select>
+
+    <label>Farm:</label>
+    <select name="farm_id">
+        <option value="">No Farm Assigned</option>
+        <% farms.forEach(farm => { %>
+            <option value="<%= farm.farm_id %>">
+                <%= farm.farm_name %>
+            </option>
+        <% }); %>
+    </select>
+
+    <button type="submit">Add User</button>
+</form>
         <table>
             <thead>
                 <tr>
@@ -80,6 +113,7 @@
                     <th>Role</th>
                     <th>Farm</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -99,6 +133,13 @@
                         <td><%= user.farm_name || 'Not assigned' %></td>
                         <td class="<%= user.is_active ? 'active' : 'inactive' %>">
                             <%= user.is_active ? 'Active' : 'Inactive' %>
+                        </td>
+                        <td>
+                            <a href="/users/edit/<%= user.user_id %>">Edit</a>
+                            <form action="/users/delete/<%= user.user_id %>" method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                <button type="submit">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 <% }); %>
