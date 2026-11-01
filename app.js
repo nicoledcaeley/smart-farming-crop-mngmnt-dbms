@@ -31,6 +31,7 @@ app.use('/reports/current-stage', require('./routes/current-stage'));
 
 app.use('/', require('./routes/pestWeather'));
 app.use('/', require('./routes/harvests'));
+app.use('/', require('./routes/input_usage'));
 
 const PORT = process.env.PORT || 3000;
 
