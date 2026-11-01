@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Farms - Smart Farming System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <%- include('partials/header') %>
+    <%- include('partials/menu') %>
+
+    <main class="container">
+        <h2>Farm Management</h2>
+
+        <h3>Add New Farm</h3>
+
+        <form action="/farms" method="POST">
+            <label for="farm_name">Farm Name:</label>
+            <input type="text" id="farm_name" name="farm_name" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="total_area_ha">Total Area (hectares):</label>
+            <input
+                type="number"
+                id="total_area_ha"
+                name="total_area_ha"
+                step="0.01"
+                min="0.01"
+                required
+            >
+
+            <button type="submit">Add Farm</button>
+        </form>
+
+        <h3>Farm List</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Farm ID</th>
+                    <th>Farm Name</th>
+                    <th>Location</th>
+                    <th>Total Area (ha)</th>
+                    <th>Date Created</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (farms.length === 0) { %>
+                    <tr>
+                        <td colspan="6">No farms found.</td>
+                    </tr>
+                <% } %>
+
+                <% farms.forEach(function(farm) { %>
+                    <tr>
+                        <td><%= farm.farm_id %></td>
+                        <td><%= farm.farm_name %></td>
+                        <td><%= farm.location %></td>
+                        <td><%= farm.total_area_ha %></td>
+                        <td><%= farm.created_at %></td>
+                        <td>
+                            <a href="/farms/<%= farm.farm_id %>/edit">Edit</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>

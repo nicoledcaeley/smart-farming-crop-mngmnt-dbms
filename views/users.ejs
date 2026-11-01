@@ -63,15 +63,19 @@
             font-weight: bold;
         }
     </style>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+    <%- include('partials/header') %>
+    <%- include('partials/menu') %>
+    
     <main class="container">
         <a class="back-link" href="/">← Back to Home</a>
 
         <h1>User Management</h1>
         <p>View registered users, their roles, farms, and account status.</p>
         <h2>Add New User</h2>
-
+        
 <form action="/users" method="POST">
     <label>Full Name:</label>
     <input type="text" name="full_name" required minlength="2">
@@ -146,5 +150,6 @@
             </tbody>
         </table>
     </main>
+    <%- include('partials/footer') %>
 </body>
 </html>
