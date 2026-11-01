@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Farm - Smart Farming System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <%- include('partials/header') %>
+    <%- include('partials/menu') %>
+
+    <main class="container">
+        <h2>Edit Farm</h2>
+
+        <form action="/farms/<%= farm.farm_id %>/edit" method="POST">
+            <label for="farm_name">Farm Name:</label>
+            <input
+                type="text"
+                id="farm_name"
+                name="farm_name"
+                value="<%= farm.farm_name %>"
+                required
+            >
+
+            <label for="location">Location:</label>
+            <input
+                type="text"
+                id="location"
+                name="location"
+                value="<%= farm.location %>"
+                required
+            >
+
+            <label for="total_area_ha">Total Area (hectares):</label>
+            <input
+                type="number"
+                id="total_area_ha"
+                name="total_area_ha"
+                step="0.01"
+                min="0.01"
+                value="<%= farm.total_area_ha %>"
+                required
+            >
+
+            <button type="submit">Update Farm</button>
+            <a href="/farms">Cancel</a>
+        </form>
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>
