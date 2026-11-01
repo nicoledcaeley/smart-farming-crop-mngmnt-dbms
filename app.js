@@ -33,6 +33,7 @@ app.use('/', require('./routes/pestWeather'));
 app.use('/', require('./routes/plantings'));
 app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
+app.use('/reports/planting-inputs', require('./routes/planting-inputs'));
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Planting Inputs Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; }
+        h2 { color: #2e7d32; }
+        a { color: #2e7d32; text-decoration: none; font-weight: bold; }
+        .wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 10px; }
+        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; white-space: nowrap; }
+        th { background-color: #2e7d32; color: white; }
+        .none { color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+    <a href="/">&larr; Back to Home</a>
+    <h2>Planting Inputs Report</h2>
+    <p>Total farm inputs used per planting (INNER JOIN + LEFT JOIN).</p>
+    <div class="wrap">
+    <table>
+        <thead>
+            <tr><th>Planting</th><th>Field</th><th>Crop</th><th>Status</th><th>Input</th><th>Total Used</th></tr>
+        </thead>
+        <tbody>
+        <% rows.forEach(r => { %>
+            <tr>
+                <td><%= r.planting_id %></td>
+                <td><%= r.field_name %></td>
+                <td><%= r.crop_name %></td>
+                <td><%= r.status %></td>
+                <% if (r.input_name) { %>
+                    <td><%= r.input_name %></td>
+                    <td><%= r.total_used %> <%= r.unit %></td>
+                <% } else { %>
+                    <td class="none">No inputs used</td>
+                    <td class="none">-</td>
+                <% } %>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
