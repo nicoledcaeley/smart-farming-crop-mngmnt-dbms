@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Role - Smart Farming System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <%- include('partials/header') %>
+    <%- include('partials/menu') %>
+
+    <main class="container">
+        <h2>Edit Role</h2>
+
+        <form action="/roles/<%= role.role_id %>/edit" method="POST">
+            <label for="role_name">Role Name:</label>
+            <input
+                type="text"
+                id="role_name"
+                name="role_name"
+                value="<%= role.role_name %>"
+                required
+            >
+
+            <label for="description">Description:</label>
+            <input
+                type="text"
+                id="description"
+                name="description"
+                value="<%= role.description || '' %>"
+            >
+
+            <button type="submit">Update Role</button>
+            <a href="/roles">Cancel</a>
+        </form>
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>
