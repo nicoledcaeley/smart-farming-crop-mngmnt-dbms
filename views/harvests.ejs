@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Harvest Entry</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; }
@@ -12,59 +13,50 @@
         th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
         th { background-color: #2e7d32; color: white; }
         a { color: #2e7d32; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .btn { background-color: #2e7d32; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; display: inline-block; width: 100%; }
-        .btn:hover { background-color: #1b5e20; }
+        .btn { background-color: #2e7d32; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        .error { background: #fdecea; color: #b71c1c; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <a href="/">&larr; Back to Home</a>
     <h2>Harvest Entry (Transactional)</h2>
-
     <div class="card">
+        <% if (typeof error !== 'undefined' && error) { %><div class="error"><%= error %></div><% } %>
         <form action="/harvests/add" method="POST">
-            <div>
-                <label>Select Active Planting:</label>
-                <select name="planting_id" required>
-                    <option value="">-- Select Active Planting --</option>
-                    <% activePlantings.forEach(p => { %>
-                        <option value="<%= p.planting_id %>">
-                            ID: <%= p.planting_id %> - <%= p.field_name %> (<%= p.crop_name %>)
-                        </option>
-                    <% }); %>
-                </select>
-            </div>
-            <div>
-                <label>Harvest Date:</label>
-                <input type="date" name="harvest_date" required>
-            </div>
-            <div>
-                <label>Yield Quantity (kg):</label>
-                <input type="number" step="0.01" name="yield_qty" placeholder="Enter yield" required>
-            </div>
-            <button type="submit" class="btn">Record Harvest & Set Field Idle</button>
+            <label>Select Active Planting:</label>
+            <select name="planting_id" required>
+                <option value="">-- Select Active Planting --</option>
+                <% plantings.forEach(p => { %>
+                    <option value="<%= p.planting_id %>">Planting #<%= p.planting_id %> (planted <%= p.planting_date %>)</option>
+                <% }); %>
+            </select>
+            <label>Harvest Date:</label>
+            <input type="date" name="harvest_date" required>
+            <label>Quantity (kg):</label>
+            <input type="number" step="0.01" min="0.01" name="quantity_kg" placeholder="Enter quantity" required>
+            <label>Quality Grade:</label>
+            <select name="quality_grade" required>
+                <option value="">-- Select Grade --</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+            <button type="submit" class="btn">Record Harvest &amp; Set Field Idle</button>
         </form>
     </div>
-
     <h3>Harvest Records</h3>
     <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Planting ID</th>
-                <th>Harvest Date</th>
-                <th>Yield (kg)</th>
-            </tr>
-        </thead>
+        <thead><tr><th>ID</th><th>Planting ID</th><th>Harvest Date</th><th>Quantity (kg)</th><th>Grade</th></tr></thead>
         <tbody>
-            <% harvests.forEach(h => { %>
-                <tr>
-                    <td><%= h.harvest_id %></td>
-                    <td><%= h.planting_id %></td>
-                    <td><%= h.harvest_date %></td>
-                    <td><%= h.yield_qty %> kg</td>
-                </tr>
-            <% }); %>
+        <% harvests.forEach(h => { %>
+            <tr>
+                <td><%= h.harvest_id %></td>
+                <td><%= h.planting_id %></td>
+                <td><%= h.harvest_date %></td>
+                <td><%= h.quantity_kg %> kg</td>
+                <td><%= h.quality_grade %></td>
+            </tr>
+        <% }); %>
         </tbody>
     </table>
 </body>

@@ -30,6 +30,7 @@ app.use('/reports/idle-fields', require('./routes/idle-fields'));
 app.use('/reports/current-stage', require('./routes/current-stage'));
 
 app.use('/', require('./routes/pestWeather'));
+app.use('/', require('./routes/harvests'));
 
 const PORT = process.env.PORT || 3000;
 
