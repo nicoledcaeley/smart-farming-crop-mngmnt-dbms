@@ -1,23 +1,3 @@
--- =====================================================================
--- Smart Farming and Crop Management System
--- schema.sql  (MySQL 8.0.16 or newer, because CHECK constraints are enforced)
--- 17 tables + seed data + sample join reports
---
--- HOW TO RUN:   mysql -u root -p < schema.sql
---          or:  open in MySQL Workbench / phpMyAdmin (XAMPP) and run all.
--- WARNING: the first lines DROP the database, so re-running resets everything.
---
--- TABLE OWNERS (slice A-F):
---   A Core ............ roles, farms, users
---   B Master data ..... crops, fields, farm_inputs
---   C Transactions .... plantings, harvests, input_usage
---   D Rules ........... crop_growth_stages, crop_thresholds, care_tasks
---   E Workflow/Audit .. sensor_readings, alerts, audit_logs
---   F Reports ......... weather_logs, pest_reports
---
--- CREATE ORDER matters: parent tables first, so foreign keys work.
--- =====================================================================
-
 DROP DATABASE IF EXISTS smart_farming;
 CREATE DATABASE smart_farming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE smart_farming;
@@ -242,11 +222,6 @@ CREATE TABLE pest_reports (
     CONSTRAINT fk_pest_user     FOREIGN KEY (reported_by) REFERENCES users(user_id)
 );
 
--- =====================================================================
--- SEED DATA  (insert order follows the FK order above)
--- Fixed IDs come from AUTO_INCREMENT order, so do not reorder the rows.
--- =====================================================================
-
 INSERT INTO roles (role_name, description) VALUES
  ('Admin',        'Full system access'),                  -- 1
  ('Farm Manager', 'Manages fields, plantings and tasks'), -- 2
@@ -257,13 +232,12 @@ INSERT INTO farms (farm_name, location, total_area_ha) VALUES
  ('Sunrise Farm',   'Bacolod City, Negros Occidental', 7.00),   -- 1
  ('Hacienda Verde', 'Silay City, Negros Occidental',   5.50);   -- 2
 
--- password_hash values are placeholders. Your app must hash real passwords.
 INSERT INTO users (role_id, farm_id, full_name, email, password_hash) VALUES
- (1, NULL, 'System Admin',   'admin@smartfarm.test',   'HASH_PLACEHOLDER'),  -- 1
- (2, 1,    'Maria Santos',   'maria@smartfarm.test',   'HASH_PLACEHOLDER'),  -- 2
- (3, 1,    'Juan Dela Cruz', 'juan@smartfarm.test',    'HASH_PLACEHOLDER'),  -- 3
- (3, 2,    'Pedro Reyes',    'pedro@smartfarm.test',   'HASH_PLACEHOLDER'),  -- 4
- (4, NULL, 'Ana Villanueva', 'ana@smartfarm.test',     'HASH_PLACEHOLDER');  -- 5
+(1, NULL, 'Roberto Dela Cruz', 'admin@smartfarm.test', 'HASH_PLACEHOLDER'),
+(2, 1, 'Maria Lourdes Santos', 'maria@smartfarm.test', 'HASH_PLACEHOLDER'),
+(3, 1, 'Juan Miguel Reyes', 'juan@smartfarm.test', 'HASH_PLACEHOLDER'),
+(3, 2, 'Mark Anthony Villanueva', 'mark@smartfarm.test', 'HASH_PLACEHOLDER'),
+(4, NULL, 'Angelica Mae Garcia', 'angelica@smartfarm.test', 'HASH_PLACEHOLDER');
 
 INSERT INTO crops (crop_name, category, days_to_maturity, expected_yield_kg_ha) VALUES
  ('Rice',       'Cereal',    110,  4500),    -- 1
