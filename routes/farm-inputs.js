@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const { allowRoles } = require('../middleware/permissions');
 
 const inputTypes = ['Seed', 'Fertilizer', 'Pesticide', 'Other'];
 

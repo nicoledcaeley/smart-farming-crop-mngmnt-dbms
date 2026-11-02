@@ -19,6 +19,10 @@ app.use(session({
         maxAge: 1000 * 60 * 60
     }
 }));
+app.use((req, res, next) => {
+    res.locals.sessionUser = req.session.user || null;
+    next();
+});
 app.use('/roles', require('./routes/roles'));
 app.use('/farms', require('./routes/farms'));
 

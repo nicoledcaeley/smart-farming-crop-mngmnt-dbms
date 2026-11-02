@@ -1,10 +1,10 @@
-
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const { allowRoles } = require('../middleware/permissions');
 
 // 1. Display all care tasks
-router.get('/', async (req, res) => {
+router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const [tasks] = await pool.query(`
             SELECT
@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
 });
 
 // 2. Create a care task
-router.post('/', async (req, res) => {
+router.post('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const {
             planting_id,
@@ -85,7 +85,7 @@ router.post('/', async (req, res) => {
 });
 
 // 3. Update a care task's status
-router.post('/:task_id/status', async (req, res) => {
+router.post('/:task_id/status', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const { task_id } = req.params;
         const { status } = req.body;
@@ -114,7 +114,7 @@ router.post('/:task_id/status', async (req, res) => {
 });
 
 // 4. Delete a care task
-router.post('/:task_id/delete', async (req, res) => {
+router.post('/:task_id/delete', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const { task_id } = req.params;
 

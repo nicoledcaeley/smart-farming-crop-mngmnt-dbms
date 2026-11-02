@@ -1,42 +1,35 @@
-# Smart Farming and Crop Management System (DBMS 1)
+# Smart Farming and Crop Management System
+**DBMS 1 Project**
 
+## Group Roster
+- Malingin
+- Pastrana
+- Quisel
+- Rebutazo
+- Rio
+- Riofrir
 
-## Group members
+## Ownership Matrix
 
-
-
-Malingin, Pastrana, Quisel, Rebutazo, Rio, Riofrir
-
-## Ownership matrix
-
-| Member | GitHub username | Tables | Endpoints / screens | Join report(s) and join type | Feature role |
+| Member | GitHub Username | Tables | Endpoints / Screens | Join Report(s) and Join Type | Feature Role |
 |---|---|---|---|---|---|
-| A Pastrana | nicoledcaeley | roles, farms, users | Users CRUD, login | Users with role and farm (INNER JOIN) | Core: login, roles |
-| B Malingin | chrisbrowny05 | crops, fields, farm_inputs | Fields CRUD screen, Crops screen, Farm inputs screen | Field with no active planting (LEFT JOIN) | Master Data |
-| C Quisel | Galaxytamer | plantings, harvests, input_usage | Plantings CRUD screen, harvest and input usage entry | Plantings with crop, field and input totals (INNER JOIN) | Transactions |
-| D Rebutazo | junalynjuly | crop_growth_stages, crop_thresholds, care_tasks | Care Tasks CRUD screen, Growth Stages screen, Thresholds screen | Current stage per planting (INNER JOIN) | Unique Feature Rules; stage advancement, harvest prediction |
-| E Rio | carmelario08 | sensor_readings, alerts, audit_logs | Alerts CRUD screen, sensor readings entry, audit log view | Fields vs weather coverage gaps (FULL OUTER via UNION of LEFT and RIGHT) | Threshold alerts, auto-created tasks, audit |
-| F Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest_report CRUD screen, weather_logs entry, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
+| A. Pastrana | nicoledcaeley | roles, farms, users | Users CRUD, Login | Users with role and farm (INNER JOIN) | Core: Login, Roles |
+| B. Malingin | chrisbrowny05 | crops, fields, farm_inputs | Fields, Crops, Farm Inputs | Field with no active planting (LEFT JOIN) | Master Data |
+| C. Quisel | Galaxytamer | plantings, harvests, input_usage | Plantings CRUD, Harvest and Input Usage | Plantings with crop, field, and input totals (INNER JOIN) | Transactions |
+| D. Rebutazo | junalynjuly | crop_growth_stages, crop_thresholds, care_tasks | Care Tasks, Growth Stages, Thresholds | Current stage per planting (INNER JOIN) | Unique Feature Rules |
+| E. Rio | carmelario08 | sensor_readings, alerts, audit_logs | Alerts, Sensor Readings, Audit Log | Fields vs. weather coverage gaps (FULL OUTER via UNION) | Threshold Alerts, Auto-created Tasks, Audit |
+| F. Riofrir | franklinriofrir16-bot | weather_logs, pest_reports | Pest Reports, Weather Logs, Dashboard | Pest report count per crop (RIGHT JOIN) | Reports and Dashboard |
 
-## Tech Stack
-Express with EJS pages
+## How to Run the Project
 
-- Database: MySQL 8.0.16
-- Backend: Node.js + Express with EJS pages
-- DB driver: mysql2
+1. Open the project folder in VS Code.
+2. Run `schema.sql` in MySQL Workbench.
+3. Configure your `.env` file using `.env.example`.
+4. Open the terminal and run:
 
+   ```bash
+   npm install
+   npm start
+   ```
 
-
-## How to run
-
-
-
-1. Run `schema.sql` in MySQL Workbench.
-
-2. Copy `.env.example` to `.env` and fill in your own values.
-
-3. Run `npm install`, then `npm start`.
-
-
-
-
+5. Open the local URL shown in the terminal.

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const { allowRoles } = require('../middleware/permissions');
 
 const validCategories = [
     'Cereal',
@@ -11,7 +12,7 @@ const validCategories = [
 ];
 
 // READ: Display all crops
-router.get('/', async (req, res) => {
+router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const [crops] = await pool.query(
             'SELECT * FROM crops ORDER BY crop_name'

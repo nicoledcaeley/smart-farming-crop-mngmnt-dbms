@@ -2,14 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const { allowRoles } = require('../middleware/permissions');
 
 // Display all roles
-router.get('/', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
-    try {
+router.get('/', allowRoles('Admin'), async (req, res) => {
+      try {
         const [roles] = await pool.query(
             'SELECT * FROM roles ORDER BY role_id'
         );
@@ -22,12 +19,8 @@ router.get('/', async (req, res) => {
 });
 
 // Add a new role
-router.post('/', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
-    const { role_name, description } = req.body;
+router.post('/', allowRoles('Admin'), async (req, res) => {
+   const { role_name, description } = req.body;
 
     if (!role_name || !role_name.trim()) {
         return res.status(400).send('Role name is required.');
@@ -52,11 +45,7 @@ router.post('/', async (req, res) => {
 });
 
 // Display edit form
-router.get('/:id/edit', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.get('/:id/edit', allowRoles('Admin'), async (req, res) => {
     try {
         const [roles] = await pool.query(
             'SELECT * FROM roles WHERE role_id = ?',
@@ -75,11 +64,7 @@ router.get('/:id/edit', async (req, res) => {
 });
 
 // Update role
-router.post('/:id/edit', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.post('/:id/edit', allowRoles('Admin'), async (req, res) => {
     const { role_name, description } = req.body;
 
     if (!role_name || !role_name.trim()) {

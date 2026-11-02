@@ -65,8 +65,12 @@
                         <td><%= farm.total_area_ha %></td>
                         <td><%= farm.created_at %></td>
                         <td>
-                            <a href="/farms/<%= farm.farm_id %>/edit">Edit</a>
-                        </td>
+    <% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+        <a href="/farms/<%= farm.farm_id %>/edit">Edit</a>
+    <% } else { %>
+        —
+    <% } %>
+</td>
                     </tr>
                 <% }); %>
             </tbody>
