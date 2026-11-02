@@ -44,7 +44,8 @@ app.use('/', require('./routes/plantings'));
 app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
 app.use('/reports/planting-inputs', require('./routes/planting-inputs'));
-
+app.use('/audit', require('./routes/audit'));
+app.use('/reports', require('./routes/reports'));
 // Automatically update growth stages
 async function runStageAdvancement() {
     try {
