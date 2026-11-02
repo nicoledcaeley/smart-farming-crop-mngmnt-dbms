@@ -6,7 +6,7 @@ const { allowRoles } = require('../middleware/permissions');
 const inputTypes = ['Seed', 'Fertilizer', 'Pesticide', 'Other'];
 
 // GET: Display all farm inputs
-router.get('/', async (req, res) => {
+router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const [inputs] = await pool.query(`
             SELECT *,
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST: Add a farm input
-router.post('/', async (req, res) => {
+router.post('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     const { input_name, input_type, unit, stock_qty, reorder_level } = req.body;
 
     if (
@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
 });
 
 // POST: Update a farm input
-router.post('/:id/update', async (req, res) => {
+router.post('/:id/update', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const { input_name, input_type, unit, stock_qty, reorder_level } = req.body;
     const inputId = Number(req.params.id);
 
@@ -134,7 +134,7 @@ res.redirect('/farm-inputs');
 });
 
 // POST: Delete a farm input
-router.post('/:id/delete', async (req, res) => {
+router.post('/:id/delete', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const inputId = Number(req.params.id);
 
     if (!Number.isInteger(inputId) || inputId <= 0) {
