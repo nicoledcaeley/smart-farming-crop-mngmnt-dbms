@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const bcrypt = require('bcrypt');
+const { allowRoles } = require('../middleware/permissions');
 
 // Show login page
 router.get('/login', (req, res) => {
@@ -10,11 +11,12 @@ router.get('/login', (req, res) => {
 });
 
 // Homepage
-router.get('/', async (req, res) => {
+router.get('/', (req, res, next) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
-
+    next();
+}, async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM roles');
         res.render('index', { roles: rows });
@@ -23,13 +25,13 @@ router.get('/', async (req, res) => {
         res.status(500).send('Database error');
     }
 });
-
 // Plantings
-router.get('/plantings', async (req, res) => {
-
+router.get('/plantings', (req, res, next) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
+    next();
+}, async (req, res) => {
     try {
         const [plantings] = await pool.query(`
             SELECT p.planting_id, f.field_name, c.crop_name,
@@ -110,11 +112,7 @@ router.get('/logout', (req, res) => {
 });
 
 // User management
-router.get('/users', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.get('/users', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     try {
         const [users] = await pool.query(`
             SELECT
@@ -146,11 +144,7 @@ router.get('/users', async (req, res) => {
     }
 });
  // Add new user
-router.post('/users', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.post('/users', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const { full_name, email, password, role_id, farm_id } = req.body;
 
     // Basic field validation
@@ -199,11 +193,7 @@ router.post('/users', async (req, res) => {
 });
 
 // Show edit user page
-router.get('/users/edit/:id', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.get('/users/edit/:id', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const userId = req.params.id;
 
     try {
@@ -239,10 +229,7 @@ router.get('/users/edit/:id', async (req, res) => {
 });
 
 // Update user information
-router.post('/users/edit/:id', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+router.post('/users/edit/:id', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
 
     const userId = req.params.id;
     const { full_name, email, role_id, farm_id, is_active } = req.body;
@@ -299,11 +286,7 @@ router.post('/users/edit/:id', async (req, res) => {
 });
 
 // Delete user
-router.post('/users/delete/:id', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.post('/users/delete/:id', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const userId = req.params.id;
 
     // Prevent deleting your own account
@@ -337,11 +320,12 @@ router.post('/users/delete/:id', async (req, res) => {
 });
 
 // Users, Roles, and Farms JOIN Report
-router.get('/reports/users-roles-farms', async (req, res) => {
+router.get('/reports/users-roles-farms', (req, res, next) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
-
+    next();
+}, async (req, res) => {
     try {
         const [report] = await pool.query(`
             SELECT
