@@ -42,7 +42,7 @@ router.get('/dashboard', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, r
 // ==========================================
 
 // GET: List all pest reports
-router.get('/pest-reports', async (req, res) => {
+router.get('/reports', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     const [reports] = await db.query(`
       SELECT pr.*, p.planting_id, c.crop_name, f.field_name
@@ -67,7 +67,6 @@ router.get('/pest-reports', async (req, res) => {
 
 // POST: Add pest report
 router.post('/pest-reports/add', async (req, res) => {
-  const { planting_id, pest_name, severity, report_date, notes } = req.body;
   try {
     await db.query(
       `INSERT INTO pest_reports (planting_id, pest_name, severity, report_date, notes) 
@@ -82,7 +81,7 @@ router.post('/pest-reports/add', async (req, res) => {
 });
 
 // POST: Delete pest report
-router.post('/pest-reports/delete/:id', async (req, res) => {
+router.post('/pest-reports/delete/:id', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     await db.query('DELETE FROM pest_reports WHERE report_id = ?', [req.params.id]);
     res.redirect('/pest-reports');
@@ -97,7 +96,7 @@ router.post('/pest-reports/delete/:id', async (req, res) => {
 // ==========================================
 
 // GET: List all weather logs
-router.get('/weather-logs', async (req, res) => {
+router.get('/weather-logs', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     const [logs] = await db.query(`
       SELECT wl.*, f.field_name 
@@ -114,7 +113,7 @@ router.get('/weather-logs', async (req, res) => {
 });
 
 // POST: Add weather log
-router.post('/weather-logs/add', async (req, res) => {
+router.post('/weather-logs/add', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   const { field_id, temperature, humidity, rainfall, log_date } = req.body;
   try {
     await db.query(
@@ -130,7 +129,7 @@ router.post('/weather-logs/add', async (req, res) => {
 });
 
 // POST: Delete weather log
-router.post('/weather-logs/delete/:id', async (req, res) => {
+router.post('/weather-logs/delete/:id', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     await db.query('DELETE FROM weather_logs WHERE log_id = ?', [req.params.id]);
     res.redirect('/weather-logs');
