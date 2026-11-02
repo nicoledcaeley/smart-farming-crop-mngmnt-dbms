@@ -233,11 +233,11 @@ INSERT INTO farms (farm_name, location, total_area_ha) VALUES
  ('Hacienda Verde', 'Silay City, Negros Occidental',   5.50);   -- 2
 
 INSERT INTO users (role_id, farm_id, full_name, email, password_hash) VALUES
-(1, NULL, 'Carlito Javier', 'admin@smartfarm.test', 'HASH_PLACEHOLDER'),
-(2, 1, 'Anton Vargas', 'anton@smartfarm.test', 'HASH_PLACEHOLDER'),
-(3, 1, 'Louie Macias', 'louiejay@smartfarm.test', 'HASH_PLACEHOLDER'),
-(3, 2, 'Rex Malingin', 'christbrowny@smartfarm.test', 'HASH_PLACEHOLDER'),
-(4, NULL, 'Kent Yugto', 'kentboy@smartfarm.test', 'HASH_PLACEHOLDER');
+(1, NULL, 'Carlito Javier', 'admin@smartfarm.test', '$2b$10$RHmejlTzwd8B2Xxff531Nu2Ak33yvzIHTECQcw4npOsht0eLv7D6.'),
+(2, 1, 'Anton Vargas', 'anton@smartfarm.test', '$2b$10$jTyJCOK.YlSuxjB4jYWQhOIa8IKnY8cQlT1auIOITof/5L6Y4FHUC'),
+(3, 1, 'Louie Macias', 'louiejay@smartfarm.test', '$2b$10$qol0uE3Ztsdml2DZVt.ZWOP9Uj00HexTe3l/Poj4kF9aUhYZiTDvK'),
+(3, 2, 'Rex Malingin', 'christbrowny@smartfarm.test', '$2b$10$5oEzY4w2Tx980Ev8IXJVUuO6Ygs6Ix/kZi98YuyuQ.zZen/QOIg.O'),
+(4, NULL, 'Kent Yugto', 'kentboy@smartfarm.test', '$2b$10$Sxayur8U1ThO.FfzJtat0.AOETQICrjmNXpT2OGPkOaitSjKkduH2');
 
 INSERT INTO crops (crop_name, category, days_to_maturity, expected_yield_kg_ha) VALUES
  ('Rice',       'Cereal',    110,  4500),    -- 1
