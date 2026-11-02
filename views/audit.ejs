@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Audit Logs</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/menu') %>
+
+  <div class="container">
+    <h1>Audit Logs</h1>
+    <p>Newest first - Read only</p>
+
+    <table border="1" cellpadding="5">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Table</th>
+          <th>Details</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% logs.forEach(log => { %>
+          <tr>
+            <td><%= log.log_id %></td>
+            <td><%= log.user_display %></td>
+            <td><%= log.action %></td>
+            <td><%= log.table_name %></td>
+            <td><%= log.details %></td>
+            <td><%= new Date(log.created_at).toLocaleString() %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
