@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-
+const { allowRoles } = require('../middleware/permissions');
 // ==========================================
 // 1. DASHBOARD & REPORTS (RIGHT JOIN QUERY)
 // ==========================================
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     // Required SQL: Pest report count per crop using RIGHT JOIN
     const [pestSummary] = await db.query(`
