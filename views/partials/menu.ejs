@@ -1,7 +1,21 @@
+<%
+    const userRole = sessionUser ? sessionUser.role_name : '';
+%>
+
 <nav class="main-menu">
     <a href="/">Home</a>
-    <a href="/users">Users</a>
-    <a href="/roles">Roles</a>
-    <a href="/farms">Farms</a>
+
+    <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+        <a href="/users">Users</a>
+    <% } %>
+
+    <% if (userRole === 'Admin') { %>
+        <a href="/roles">Roles</a>
+    <% } %>
+
+    <% if (['Admin', 'Farm Manager', 'Farmer', 'Agronomist'].includes(userRole)) { %>
+        <a href="/farms">Farms</a>
+    <% } %>
+
     <a href="/logout">Logout</a>
 </nav>

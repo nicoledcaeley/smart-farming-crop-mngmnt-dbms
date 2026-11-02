@@ -1,13 +1,10 @@
-
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const { allowRoles } = require('../middleware/permissions');
 
 // Display all farms
-router.get('/', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
 
     try {
         const [farms] = await pool.query(
@@ -22,10 +19,7 @@ router.get('/', async (req, res) => {
 });
 
 // Add a new farm
-router.post('/', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+router.post('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
 
     const { farm_name, location, total_area_ha } = req.body;
 
@@ -59,11 +53,7 @@ router.post('/', async (req, res) => {
 });
 
 // Display edit form
-router.get('/:id/edit', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
+router.get('/:id/edit', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     try {
         const [farms] = await pool.query(
             'SELECT * FROM farms WHERE farm_id = ?',
@@ -82,10 +72,7 @@ router.get('/:id/edit', async (req, res) => {
 });
 
 // Update farm
-router.post('/:id/edit', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+router.post('/:id/edit', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
 
     const { farm_name, location, total_area_ha } = req.body;
 
