@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background: #f4f8f1;
+            color: #243524;
+        }
+
+        h1 {
+            color: #2e6b35;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #2e6b35;
+            color: white;
+        }
+
+        .ready {
+            color: #b42318;
+            font-weight: bold;
+        }
+
+        .growing {
+            color: #24703b;
+            font-weight: bold;
+        }
+
+        .empty {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌱 Harvest Prediction</h1>
+    <p>Estimated harvest dates for your active plantings.</p>
+
+    <div class="table-container">
+        <% if (predictions.length === 0) { %>
+            <p class="empty">No active plantings found.</p>
+        <% } else { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Planting ID</th>
+                        <th>Crop</th>
+                        <th>Planting Date</th>
+                        <th>Predicted Harvest</th>
+                        <th>Days Remaining</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% predictions.forEach(function(item) { %>
+                        <tr>
+                            <td><%= item.planting_id %></td>
+                            <td><%= item.crop_name %></td>
+                            <td><%= new Date(item.planting_date).toLocaleDateString() %></td>
+                            <td><%= new Date(item.predicted_harvest_date).toLocaleDateString() %></td>
+                            <td>
+                                <%= Math.max(0, item.days_remaining) %>
+                            </td>
+                            <td class="<%= item.days_remaining <= 0 ? 'ready' : 'growing' %>">
+                                <%= item.harvest_status %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+
+        <p><a href="/">Back to Home</a></p>
+    </div>
+</body>
+</html>

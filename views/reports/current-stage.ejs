@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Current Stage per Planting Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f3f7f1;
+            color: #243b2a;
+        }
+
+        h1 {
+            color: #246b35;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #dcebd8;
+        }
+
+        .empty {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Current Stage per Planting Report</h1>
+
+    <p>
+        This report displays each planting, its crop, planting date,
+        expected harvest date, current growth stage, and status.
+    </p>
+
+    <p><a href="/">Back to Home</a></p>
+
+    <% if (plantings.length === 0) { %>
+        <p class="empty">No planting records found.</p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Planting ID</th>
+                    <th>Crop</th>
+                    <th>Planting Date</th>
+                    <th>Expected Harvest</th>
+                    <th>Current Stage</th>
+                    <th>Stage Order</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% plantings.forEach(planting => { %>
+                    <tr>
+                        <td><%= planting.planting_id %></td>
+                        <td><%= planting.crop_name %></td>
+                        <td><%= planting.planting_date %></td>
+                        <td><%= planting.expected_harvest_date || 'Not set' %></td>
+                        <td><%= planting.current_stage || 'Not assigned' %></td>
+                        <td><%= planting.stage_order ?? '—' %></td>
+                        <td><%= planting.status %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</body>
+</html>

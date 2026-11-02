@@ -1,23 +1,3 @@
--- =====================================================================
--- Smart Farming and Crop Management System
--- schema.sql  (MySQL 8.0.16 or newer, because CHECK constraints are enforced)
--- 17 tables + seed data + sample join reports
---
--- HOW TO RUN:   mysql -u root -p < schema.sql
---          or:  open in MySQL Workbench / phpMyAdmin (XAMPP) and run all.
--- WARNING: the first lines DROP the database, so re-running resets everything.
---
--- TABLE OWNERS (slice A-F):
---   A Core ............ roles, farms, users
---   B Master data ..... crops, fields, farm_inputs
---   C Transactions .... plantings, harvests, input_usage
---   D Rules ........... crop_growth_stages, crop_thresholds, care_tasks
---   E Workflow/Audit .. sensor_readings, alerts, audit_logs
---   F Reports ......... weather_logs, pest_reports
---
--- CREATE ORDER matters: parent tables first, so foreign keys work.
--- =====================================================================
-
 DROP DATABASE IF EXISTS smart_farming;
 CREATE DATABASE smart_farming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE smart_farming;
@@ -242,11 +222,6 @@ CREATE TABLE pest_reports (
     CONSTRAINT fk_pest_user     FOREIGN KEY (reported_by) REFERENCES users(user_id)
 );
 
--- =====================================================================
--- SEED DATA  (insert order follows the FK order above)
--- Fixed IDs come from AUTO_INCREMENT order, so do not reorder the rows.
--- =====================================================================
-
 INSERT INTO roles (role_name, description) VALUES
  ('Admin',        'Full system access'),                  -- 1
  ('Farm Manager', 'Manages fields, plantings and tasks'), -- 2
@@ -257,13 +232,12 @@ INSERT INTO farms (farm_name, location, total_area_ha) VALUES
  ('Sunrise Farm',   'Bacolod City, Negros Occidental', 7.00),   -- 1
  ('Hacienda Verde', 'Silay City, Negros Occidental',   5.50);   -- 2
 
--- password_hash values are placeholders. Your app must hash real passwords.
 INSERT INTO users (role_id, farm_id, full_name, email, password_hash) VALUES
- (1, NULL, 'System Admin',   'admin@smartfarm.test',   'HASH_PLACEHOLDER'),  -- 1
- (2, 1,    'Maria Santos',   'maria@smartfarm.test',   'HASH_PLACEHOLDER'),  -- 2
- (3, 1,    'Juan Dela Cruz', 'juan@smartfarm.test',    'HASH_PLACEHOLDER'),  -- 3
- (3, 2,    'Pedro Reyes',    'pedro@smartfarm.test',   'HASH_PLACEHOLDER'),  -- 4
- (4, NULL, 'Ana Villanueva', 'ana@smartfarm.test',     'HASH_PLACEHOLDER');  -- 5
+(1, NULL, 'Carlito Javier', 'admin@smartfarm.test', '$2b$10$RHmejlTzwd8B2Xxff531Nu2Ak33yvzIHTECQcw4npOsht0eLv7D6.'),
+(2, 1, 'Anton Vargas', 'anton@smartfarm.test', '$2b$10$jTyJCOK.YlSuxjB4jYWQhOIa8IKnY8cQlT1auIOITof/5L6Y4FHUC'),
+(3, 1, 'Louie Macias', 'louiejay@smartfarm.test', '$2b$10$qol0uE3Ztsdml2DZVt.ZWOP9Uj00HexTe3l/Poj4kF9aUhYZiTDvK'),
+(3, 2, 'Rex Malingin', 'christbrowny@smartfarm.test', '$2b$10$5oEzY4w2Tx980Ev8IXJVUuO6Ygs6Ix/kZi98YuyuQ.zZen/QOIg.O'),
+(4, NULL, 'Kent Yugto', 'kentboy@smartfarm.test', '$2b$10$Sxayur8U1ThO.FfzJtat0.AOETQICrjmNXpT2OGPkOaitSjKkduH2');
 
 INSERT INTO crops (crop_name, category, days_to_maturity, expected_yield_kg_ha) VALUES
  ('Rice',       'Cereal',    110,  4500),    -- 1
@@ -366,74 +340,8 @@ INSERT INTO pest_reports (planting_id, reported_by, pest_name, severity, reporte
  (3, 4, 'Aphids',         'Low',    '2026-10-25', 'Monitoring',                 'Open');
 -- planting 4 (harvested corn) has no pest report on purpose.
 
--- =====================================================================
--- VIEW used by the FULL OUTER JOIN report (sensor activity per farm per day)
--- =====================================================================
-
 CREATE VIEW v_sensor_days AS
 SELECT f.farm_id, DATE(sr.reading_time) AS day, COUNT(*) AS readings
 FROM sensor_readings sr
 INNER JOIN fields f ON f.field_id = sr.field_id
 GROUP BY f.farm_id, DATE(sr.reading_time);
-
--- =====================================================================
--- SAMPLE JOIN REPORTS. Run them one at a time to check the data.
--- Remove the comment markers to try a query. Adapt them into your own code.
--- =====================================================================
-
-/*
--- A (INNER): users with their role and farm
-SELECT u.full_name, r.role_name, fm.farm_name
-FROM users u
-INNER JOIN roles r  ON r.role_id = u.role_id
-LEFT  JOIN farms fm ON fm.farm_id = u.farm_id;   -- admin/agronomist have no farm
-
--- B (LEFT): fields with no active planting
-SELECT f.field_name, f.status
-FROM fields f
-LEFT JOIN plantings p ON p.field_id = f.field_id AND p.status = 'Active'
-WHERE p.planting_id IS NULL;
-
--- C (INNER): plantings with crop, field and total inputs used
-SELECT p.planting_id, c.crop_name, f.field_name, p.planting_date,
-       COALESCE(SUM(iu.quantity_used), 0) AS total_input_used
-FROM plantings p
-INNER JOIN crops  c ON c.crop_id  = p.crop_id
-INNER JOIN fields f ON f.field_id = p.field_id
-LEFT  JOIN input_usage iu ON iu.planting_id = p.planting_id
-GROUP BY p.planting_id, c.crop_name, f.field_name, p.planting_date;
-
--- D (LEFT): crops that still have no growth stages defined
-SELECT c.crop_name
-FROM crops c
-LEFT JOIN crop_growth_stages s ON s.crop_id = c.crop_id
-WHERE s.stage_id IS NULL;
-
--- D (INNER): current stage and days since planting for each active planting
-SELECT p.planting_id, c.crop_name, s.stage_name,
-       DATEDIFF('2026-10-28', p.planting_date) AS days_since_planting,
-       p.expected_harvest_date
-FROM plantings p
-INNER JOIN crops c ON c.crop_id = p.crop_id
-INNER JOIN crop_growth_stages s ON s.stage_id = p.current_stage_id
-WHERE p.status = 'Active';
-
--- E (FULL OUTER via UNION of LEFT and RIGHT; MySQL has no FULL OUTER JOIN):
--- days with sensor readings vs days with weather logs, per farm
-SELECT s.farm_id, s.day AS day_value, s.readings, w.rainfall_mm
-FROM v_sensor_days s
-LEFT JOIN weather_logs w ON w.farm_id = s.farm_id AND w.log_date = s.day
-UNION
-SELECT w.farm_id, w.log_date, s.readings, w.rainfall_mm
-FROM v_sensor_days s
-RIGHT JOIN weather_logs w ON w.farm_id = s.farm_id AND w.log_date = s.day;
-
--- F (RIGHT): pest report count per crop, including plantings with no pests
-SELECT c.crop_name,
-       COUNT(DISTINCT p.planting_id) AS plantings,
-       COUNT(pr.pest_id)             AS pest_reports
-FROM pest_reports pr
-RIGHT JOIN plantings p ON p.planting_id = pr.planting_id
-INNER JOIN crops c     ON c.crop_id = p.crop_id
-GROUP BY c.crop_id, c.crop_name;
-*/

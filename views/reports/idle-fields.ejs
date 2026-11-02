@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Idle Fields Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f3f7f1;
+            color: #243b2a;
+        }
+
+        h1 {
+            color: #246b35;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #dcebd8;
+        }
+
+        .empty {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Idle Fields Report</h1>
+
+    <p>
+        This report displays fields that do not have any active planting records.
+    </p>
+
+    <p><a href="/">Back to Home</a></p>
+
+    <% if (fields.length === 0) { %>
+
+        <p class="empty">No idle fields found.</p>
+
+    <% } else { %>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Field ID</th>
+                    <th>Field Name</th>
+                    <th>Farm Name</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <% fields.forEach(field => { %>
+
+                    <tr>
+                        <td><%= field.field_id %></td>
+                        <td><%= field.field_name %></td>
+                        <td><%= field.farm_name %></td>
+                    </tr>
+
+                <% }) %>
+
+            </tbody>
+        </table>
+
+    <% } %>
+
+</body>
+</html>

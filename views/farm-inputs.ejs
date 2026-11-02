@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Farm Inputs Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f3f7f1;
+            color: #243b2a;
+        }
+
+        h1, h2 {
+            color: #246b35;
+        }
+
+        form, table {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #dcebd8;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .low-stock {
+            color: #b42318;
+            font-weight: bold;
+        }
+
+        .normal-stock {
+            color: #246b35;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Farm Inputs Management</h1>
+
+    <p><a href="/">Back to Home</a></p>
+
+    <% if (error) { %>
+        <p class="error"><%= error %></p>
+    <% } %>
+
+    <h2>Add Farm Input</h2>
+
+    <form action="/farm-inputs" method="POST">
+
+        <label for="input_name">Input Name</label>
+        <input
+            id="input_name"
+            name="input_name"
+            maxlength="100"
+            required
+        >
+
+        <label for="input_type">Input Type</label>
+        <select id="input_type" name="input_type" required>
+            <option value="">Select type</option>
+            <option>Seed</option>
+            <option>Fertilizer</option>
+            <option>Pesticide</option>
+            <option>Other</option>
+        </select>
+
+        <label for="unit">Unit</label>
+        <input
+            id="unit"
+            name="unit"
+            maxlength="20"
+            placeholder="e.g. kg, sack, L"
+            required
+        >
+
+        <label for="stock_qty">Stock Quantity</label>
+        <input
+            id="stock_qty"
+            name="stock_qty"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+        >
+
+        <label for="reorder_level">Reorder Level</label>
+        <input
+            id="reorder_level"
+            name="reorder_level"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+        >
+
+        <button type="submit">Add Input</button>
+
+    </form>
+
+    <h2>Existing Farm Inputs</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Input Name</th>
+                <th>Type</th>
+                <th>Unit</th>
+                <th>Stock</th>
+                <th>Reorder Level</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <% inputs.forEach(input => { %>
+
+                <tr>
+                    <td><%= input.input_id %></td>
+                    <td><%= input.input_name %></td>
+                    <td><%= input.input_type %></td>
+                    <td><%= input.unit %></td>
+                    <td><%= input.stock_qty %></td>
+                    <td><%= input.reorder_level %></td>
+
+                    <td>
+                        <% if (input.low_stock) { %>
+                            <span class="low-stock">Low Stock</span>
+                        <% } else { %>
+                            <span class="normal-stock">Sufficient</span>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <button
+                            type="button"
+                            onclick="document.getElementById('edit-<%= input.input_id %>').hidden = !document.getElementById('edit-<%= input.input_id %>').hidden">
+                            Edit
+                        </button>
+
+                        <form
+                            action="/farm-inputs/<%= input.input_id %>/delete"
+                            method="POST"
+                            onsubmit="return confirm('Delete this farm input?');">
+
+                            <button type="submit">Delete</button>
+
+                        </form>
+                    </td>
+                </tr>
+
+                <tr id="edit-<%= input.input_id %>" hidden>
+                    <td colspan="8">
+
+                        <form
+                            action="/farm-inputs/<%= input.input_id %>/update"
+                            method="POST">
+
+                            <label>Input Name</label>
+                            <input
+                                name="input_name"
+                                value="<%= input.input_name %>"
+                                maxlength="100"
+                                required
+                            >
+
+                            <label>Input Type</label>
+                            <select name="input_type" required>
+
+                                <% ['Seed', 'Fertilizer', 'Pesticide', 'Other'].forEach(type => { %>
+
+                                    <option
+                                        value="<%= type %>"
+                                        <%= type === input.input_type ? 'selected' : '' %>>
+                                        <%= type %>
+                                    </option>
+
+                                <% }) %>
+
+                            </select>
+
+                            <label>Unit</label>
+                            <input
+                                name="unit"
+                                value="<%= input.unit %>"
+                                maxlength="20"
+                                required
+                            >
+
+                            <label>Stock Quantity</label>
+                            <input
+                                name="stock_qty"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="<%= input.stock_qty %>"
+                                required
+                            >
+
+                            <label>Reorder Level</label>
+                            <input
+                                name="reorder_level"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="<%= input.reorder_level %>"
+                                required
+                            >
+
+                            <button type="submit">Save Changes</button>
+
+                        </form>
+
+                    </td>
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+    </table>
+
+</body>
+</html>

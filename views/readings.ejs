@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><title>Readings</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+<h2>Sensor Readings</h2>
+<form action="/readings" method="POST" class="card p-3 mb-4">
+<div class="row">
+<div class="col-md-3">
+<select name="field_id" class="form-control" required>
+<option value="">Select Field</option>
+</select>
+</div>
+<div class="col-md-3">
+<select name="metric" class="form-control" required>
+<option value="soil_moisture">soil_moisture</option>
+<option value="temperature">temperature</option>
+<option value="humidity">humidity</option>
+</select>
+</div>
+<div class="col-md-2">
+<input type="number" step="0.01" name="value" class="form-control" placeholder="Value" required>
+</div>
+<div class="col-md-2">
+<button class="btn btn-primary w-100">Add</button>
+</div>
+</div>
+</form>
+<table class="table table-bordered">
+<tr><th>ID</th><th>Field</th><th>Metric</th><th>Value</th><th>Date</th></tr>
+<tr><td colspan="5">No readings yet</td></tr>
+</table>
+<a href="/" class="btn btn-secondary">Back</a>
+</div>
+</body>
+</html>

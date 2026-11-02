@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roles - Smart Farming System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <%- include('partials/header') %>
+    <%- include('partials/menu') %>
+
+    <main class="container">
+        <h2>Role Management</h2>
+
+        <h3>Add New Role</h3>
+
+        <form action="/roles" method="POST">
+            <label for="role_name">Role Name:</label>
+            <input type="text" id="role_name" name="role_name" required>
+
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+
+            <button type="submit">Add Role</button>
+        </form>
+
+        <h3>Role List</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Role ID</th>
+                    <th>Role Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (roles.length === 0) { %>
+                    <tr>
+                        <td colspan="4">No roles found.</td>
+                    </tr>
+                <% } %>
+
+                <% roles.forEach(function(role) { %>
+                    <tr>
+                        <td><%= role.role_id %></td>
+                        <td><%= role.role_name %></td>
+                        <td><%= role.description || '-' %></td>
+                        <td>
+                            <a href="/roles/<%= role.role_id %>/edit">Edit</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>
