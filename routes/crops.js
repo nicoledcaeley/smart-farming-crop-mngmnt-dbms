@@ -29,7 +29,7 @@ router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), asy
 });
 
 // CREATE: Add a new crop
-router.post('/', async (req, res) => {
+router.post('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     const crop_name = req.body.crop_name?.trim();
     const category = req.body.category;
     const days_to_maturity = Number(req.body.days_to_maturity);
@@ -102,7 +102,7 @@ router.post('/', async (req, res) => {
 });
 
 // UPDATE: Edit an existing crop
-router.post('/:id/update', async (req, res) => {
+router.post('/:id/update', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const id = Number(req.params.id);
     const crop_name = req.body.crop_name?.trim();
     const category = req.body.category;
@@ -174,7 +174,7 @@ router.post('/:id/update', async (req, res) => {
 });
 
 // DELETE: Remove a crop
-router.post('/:id/delete', async (req, res) => {
+router.post('/:id/delete', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const id = Number(req.params.id);
 
     try {

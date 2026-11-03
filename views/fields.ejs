@@ -109,7 +109,9 @@
                 <th>Area (ha)</th>
                 <th>Soil</th>
                 <th>Status</th>
-                <th>Actions</th>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+    <th>Actions</th>
+<% } %>
             </tr>
         </thead>
         <tbody>
@@ -121,6 +123,7 @@
                     <td><%= field.area_ha %></td>
                     <td><%= field.soil_type %></td>
                     <td><%= field.status %></td>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
 <td>
     <button type="button"
             onclick="document.getElementById('edit-<%= field.field_id %>').hidden = !document.getElementById('edit-<%= field.field_id %>').hidden">
@@ -133,7 +136,9 @@
         <button type="submit">Delete</button>
     </form>
 </td>
-                </tr>
+<% } %>
+</tr>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
                 <tr id="edit-<%= field.field_id %>" hidden>
     <td colspan="7">
         <form action="/fields/<%= field.field_id %>/update" method="POST">
@@ -180,6 +185,7 @@
         </form>
     </td>
 </tr>
+     <% } %>
             <% }) %>
         </tbody>
     </table>

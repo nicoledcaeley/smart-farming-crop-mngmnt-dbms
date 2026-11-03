@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { allowRoles } = require('../middleware/permissions');
 const db = require('../config/db');
 
 const STATUSES = ['Active', 'Harvested', 'Failed'];
@@ -35,12 +36,12 @@ async function renderEdit(res, id, extra = {}) {
   res.render('edit-planting', { planting: rows[0], crops, error: null, ...extra });
 }
 
-router.get('/plantings', async (req, res) => {
+router.get('/plantings', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   try { await renderPage(res); }
   catch (e) { console.error(e); res.status(500).send('Database error'); }
 });
 
-router.post('/plantings/add', async (req, res) => {
+router.post('/plantings/add', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   const { field_id, crop_id, planting_date } = req.body;
   const plantedBy = (req.session && req.session.user && req.session.user.user_id) || 1;
   try {
@@ -81,12 +82,12 @@ router.post('/plantings/add', async (req, res) => {
   }
 });
 
-router.get('/plantings/edit/:id', async (req, res) => {
+router.get('/plantings/edit/:id', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   try { await renderEdit(res, req.params.id); }
   catch (e) { console.error(e); res.status(500).send('Database error'); }
 });
 
-router.post('/plantings/update/:id', async (req, res) => {
+router.post('/plantings/update/:id', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   const id = req.params.id;
   const { crop_id, planting_date, expected_harvest_date, status } = req.body;
   try {
@@ -127,7 +128,7 @@ router.post('/plantings/update/:id', async (req, res) => {
   }
 });
 
-router.post('/plantings/delete/:id', async (req, res) => {
+router.post('/plantings/delete/:id', allowRoles('Admin', 'Farm Manager', 'Farmer'), async (req, res) => {
   const id = req.params.id;
   try {
     const conn = await db.getConnection();

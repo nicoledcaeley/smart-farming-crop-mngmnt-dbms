@@ -2,17 +2,18 @@
 <html>
 <head>
   <title>Weather Logs Entry</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+ <%- include('../partials/header') %>
   <h1>Weather Logs</h1>
-  <nav><a href="/dashboard">Dashboard</a> | <a href="/pest-reports">Pest Reports</a></nav>
 
   <h3>Record Daily Weather Reading</h3>
   <form action="/weather-logs/add" method="POST">
     <label>Target Field:</label>
-    <select name="field_id" required>
-      <% fields.forEach(f => { %>
-        <option value="<%= f.field_id %>"><%= f.field_name %></option>
+    <select name="farm_id" required>
+      <% farms.forEach(f => { %>
+        <option value="<%= f.farm_id %>"><%= f.farm_name %></option>
       <% }) %>
     </select><br><br>
 
@@ -36,7 +37,7 @@
     <thead>
       <tr>
         <th>Log ID</th>
-        <th>Field</th>
+        <th>Farm</th>
         <th>Temp (°C)</th>
         <th>Humidity (%)</th>
         <th>Rainfall (mm)</th>
@@ -48,7 +49,7 @@
       <% logs.forEach(l => { %>
         <tr>
           <td><%= l.log_id %></td>
-          <td><%= l.field_name %></td>
+          <td><%= l.farm_name %></td>
           <td><%= l.temperature %></td>
           <td><%= l.humidity %></td>
           <td><%= l.rainfall %></td>

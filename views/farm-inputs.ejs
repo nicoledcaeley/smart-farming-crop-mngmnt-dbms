@@ -138,7 +138,9 @@
                 <th>Stock</th>
                 <th>Reorder Level</th>
                 <th>Status</th>
-                <th>Actions</th>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+    <th>Actions</th>
+<% } %>
             </tr>
         </thead>
 
@@ -161,7 +163,7 @@
                             <span class="normal-stock">Sufficient</span>
                         <% } %>
                     </td>
-
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
                     <td>
                         <button
                             type="button"
@@ -177,10 +179,12 @@
                             <button type="submit">Delete</button>
 
                         </form>
-                    </td>
-                </tr>
+</td>
+<% } %>
+</tr>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+<tr id="edit-<%= input.input_id %>" hidden>
 
-                <tr id="edit-<%= input.input_id %>" hidden>
                     <td colspan="8">
 
                         <form
@@ -244,6 +248,8 @@
 
                     </td>
                 </tr>
+
+<% } %>
 
             <% }) %>
 
