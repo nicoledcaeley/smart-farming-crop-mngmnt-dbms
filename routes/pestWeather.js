@@ -5,37 +5,17 @@ const { allowRoles } = require('../middleware/permissions');
 // ==========================================
 // 1. DASHBOARD & REPORTS (RIGHT JOIN QUERY)
 // ==========================================
-router.get('/dashboard', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
+router.get('/weather-logs', async (req, res) => {
   try {
-    // Required SQL: Pest report count per crop using RIGHT JOIN
-    const [pestSummary] = await db.query(`
-      SELECT 
-        c.crop_id,
-        c.crop_name,
-        c.category,
-        COUNT(pr.pest_id) AS total_pest_reports,
-        MAX(pr.reported_date) AS latest_reported_date
-      FROM pest_reports pr
-      RIGHT JOIN plantings p ON pr.planting_id = p.planting_id
-      RIGHT JOIN crops c ON p.crop_id = c.crop_id
-      GROUP BY c.crop_id, c.crop_name, c.category
-      ORDER BY total_pest_reports DESC
-    `);
-
-    // Fetch recent weather logs
-    const [recentWeather] = await db.query(`
-      SELECT wl.*, f.farm_name 
-      FROM weather_logs wl
-      JOIN farms f ON wl.farm_id = f.farm_id
-      ORDER BY wl.log_date DESC LIMIT 5
-    `);
-
-    res.render('reports/dashboard', { pestSummary, recentWeather });
+    const [farms] = await db.query('SELECT * FROM farms');
+    const [logs] = await db.query('SELECT wl.*, f.farm_name FROM weather_logs wl JOIN farms f ON wl.farm_id = f.farm_id ORDER BY wl.log_date DESC');
+    res.render('weather/index', { farms, logs });
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    console.error('Error fetching data:', error);
     res.status(500).send('Database Error');
   }
 });
+
 
 // ==========================================
 // 2. PEST REPORTS CRUD
