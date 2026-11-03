@@ -1,16 +1,12 @@
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Users, Roles, and Farms Report</title>
-</head>
-<body>
+<%- include('../partials/header') %>
 
+<div class="container">
     <h1>Users, Roles, and Farms Report</h1>
 
     <p>List of users, their assigned roles, and farms.</p>
 
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
             <tr>
                 <th>User ID</th>
@@ -36,6 +32,6 @@
 
     <br>
     <a href="/users">Back to Users</a>
+</div>
 
-</body>
-</html>
+<%- include('../partials/footer') %>

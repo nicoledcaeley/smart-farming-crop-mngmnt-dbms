@@ -45,6 +45,18 @@ app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
 app.use('/reports/planting-inputs', require('./routes/planting-inputs'));
 
+// 404 Not Found Handler
+app.use((req, res) => {
+    res.status(404).render('404');
+});
+
+// Database Error Handler
+app.use((err, req, res, next) => {
+    console.error('Database error:', err);
+
+    res.status(500).render('database-error');
+});
+
 // Automatically update growth stages
 async function runStageAdvancement() {
     try {
