@@ -27,6 +27,8 @@ app.use('/roles', require('./routes/roles'));
 app.use('/farms', require('./routes/farms'));
 
 app.use('/', require('./routes/index'));
+app.use('/pest-reports', require('./routes/pestWeather'));
+app.use('/weather-logs', require('./routes/pestWeather'));
 app.use('/growth-stages', require('./routes/growth-stages')); 
 app.use('/thresholds', require('./routes/thresholds'));
 app.use('/care-tasks', require('./routes/care-tasks'));
@@ -44,7 +46,8 @@ app.use('/', require('./routes/plantings'));
 app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
 app.use('/reports/planting-inputs', require('./routes/planting-inputs'));
-
+app.use('/audit', require('./routes/audit'));
+app.use('/reports', require('./routes/reports'));
 // Automatically update growth stages
 async function runStageAdvancement() {
     try {

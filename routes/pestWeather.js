@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-
+const { allowRoles } = require('../middleware/permissions');
 // ==========================================
 // 1. DASHBOARD & REPORTS (RIGHT JOIN QUERY)
 // ==========================================
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     // Required SQL: Pest report count per crop using RIGHT JOIN
     const [pestSummary] = await db.query(`
@@ -42,7 +42,7 @@ router.get('/dashboard', async (req, res) => {
 // ==========================================
 
 // GET: List all pest reports
-router.get('/pest-reports', async (req, res) => {
+router.get('/reports', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     const [reports] = await db.query(`
       SELECT pr.*, p.planting_id, c.crop_name, f.field_name
@@ -82,7 +82,7 @@ router.post('/pest-reports/add', async (req, res) => {
 });
 
 // POST: Delete pest report
-router.post('/pest-reports/delete/:id', async (req, res) => {
+router.post('/pest-reports/delete/:id', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     await db.query('DELETE FROM pest_reports WHERE report_id = ?', [req.params.id]);
     res.redirect('/pest-reports');
@@ -97,7 +97,7 @@ router.post('/pest-reports/delete/:id', async (req, res) => {
 // ==========================================
 
 // GET: List all weather logs
-router.get('/weather-logs', async (req, res) => {
+router.get('/weather-logs', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     const [logs] = await db.query(`
       SELECT wl.*, f.farm_name 
@@ -130,7 +130,7 @@ router.post('/weather-logs/add', async (req, res) => {
 });
 
 // POST: Delete weather log
-router.post('/weather-logs/delete/:id', async (req, res) => {
+router.post('/weather-logs/delete/:id', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     await db.query('DELETE FROM weather_logs WHERE log_id = ?', [req.params.id]);
     res.redirect('/weather-logs');

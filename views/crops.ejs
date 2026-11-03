@@ -119,7 +119,9 @@
                 <th>Category</th>
                 <th>Days to Maturity</th>
                 <th>Expected Yield (kg/ha)</th>
-                <th>Actions</th>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+    <th>Actions</th>
+<% } %>
             </tr>
         </thead>
 
@@ -135,6 +137,7 @@
                     <td>
                         <%= crop.expected_yield_kg_ha ?? 'Not specified' %>
                     </td>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
 
                     <td>
                         <button
@@ -152,8 +155,9 @@
 
                         </form>
                     </td>
-                </tr>
-
+              <% } %>
+              </tr>
+<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
                 <tr id="edit-<%= crop.crop_id %>" hidden>
                     <td colspan="6">
 
@@ -212,6 +216,7 @@
                     </td>
                 </tr>
 
+<% } %>
             <% }) %>
 
         </tbody>

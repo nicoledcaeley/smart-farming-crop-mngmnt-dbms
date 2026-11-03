@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { allowRoles } = require('../middleware/permissions');
 const db = require('../config/db');
 
 async function getConn() {
@@ -15,12 +16,12 @@ async function renderPage(res, extra = {}) {
   res.render('harvests', { plantings, harvests, error: null, ...extra });
 }
 
-router.get('/harvests', async (req, res) => {
+router.get('/harvests', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   try { await renderPage(res); }
   catch (e) { console.error(e); res.status(500).send('Database error'); }
 });
 
-router.post('/harvests/add', async (req, res) => {
+router.post('/harvests/add', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   const { planting_id, harvest_date, quantity_kg, quality_grade } = req.body;
   const qty = parseFloat(quantity_kg);
   const recordedBy = (req.session && req.session.user && req.session.user.user_id) || 1;

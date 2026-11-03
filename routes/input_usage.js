@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { allowRoles } = require('../middleware/permissions');
 const db = require('../config/db');
 
 async function renderPage(res, extra = {}) {
@@ -20,12 +21,12 @@ async function renderPage(res, extra = {}) {
   res.render('input_usage', { plantings, farmInputs, usages, error: null, ...extra });
 }
 
-router.get('/input-usage', async (req, res) => {
+router.get('/input-usage', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   try { await renderPage(res); }
   catch (e) { console.error(e); res.status(500).send('Database error'); }
 });
 
-router.post('/input-usage/add', async (req, res) => {
+router.post('/input-usage/add', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   const { planting_id, input_id, quantity_used, usage_date } = req.body;
   const qty = parseFloat(quantity_used);
   const usedBy = (req.session && req.session.user && req.session.user.user_id) || 1;
