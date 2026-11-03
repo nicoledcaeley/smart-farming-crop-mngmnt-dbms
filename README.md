@@ -33,3 +33,17 @@
    ```
 
 5. Open the local URL shown in the terminal.
+
+## Demo Accounts
+
+The following demo accounts are provided for testing the Smart Farming and Crop Management System.
+
+| Role | Name | Email |
+|---|---|---|
+| Admin | Carlito Javier | admin@smartfarm.test |
+| Farm Manager | Anton Vargas | anton@smartfarm.test |
+| Farmer | Louie Macias | louiejay@smartfarm.test |
+| Farmer | Rex Malingin | christbrowny@smartfarm.test |
+| Agronomist | Kent Yugto | kentboy@smartfarm.test |
+
+**Note:** These accounts are for development and testing purposes only. Login passwords are shared separately with authorized team members. Do not publish passwords or other sensitive credentials in this repository.
