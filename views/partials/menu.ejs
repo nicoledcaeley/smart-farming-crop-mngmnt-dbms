@@ -15,9 +15,11 @@
 
         <a href="/farms">Farms</a>
 
+<a href="/reports/coverage">Pest Reports</a>
 
-    <a href="/pest-reports">Pest Reports</a>
-<a href="/weather-logs">Weather Logs</a>
+<% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+  <a href="/weather-logs">Weather Logs</a>
+<% } %>
 
     <a href="/logout">Logout</a>
 </nav>
