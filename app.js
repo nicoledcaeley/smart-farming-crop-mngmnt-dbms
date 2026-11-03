@@ -45,15 +45,18 @@ app.use('/', require('./routes/harvests'));
 app.use('/', require('./routes/input_usage'));
 app.use('/reports/planting-inputs', require('./routes/planting-inputs'));
 
+// Audit Logs and Reports
+app.use('/audit', require('./routes/audit'));
+app.use('/reports', require('./routes/reports'));
+
 // 404 Not Found Handler
 app.use((req, res) => {
     res.status(404).render('404');
 });
 
-// Database Error Handler
+// Error Handler
 app.use((err, req, res, next) => {
-    console.error('Database error:', err);
-
+    console.error('Application error:', err);
     res.status(500).render('database-error');
 });
 
