@@ -1,5 +1,5 @@
-<%
-    const userRole = sessionUser ? sessionUser.role_name : '';
+<% 
+    const userRole = sessionUser ? sessionUser.role_name : ''; 
 %>
 
 <nav class="main-menu">
@@ -13,12 +13,11 @@
         <a href="/roles">Roles</a>
     <% } %>
 
-    <% if (['Admin', 'Farm Manager', 'Farmer', 'Agronomist'].includes(userRole)) { %>
         <a href="/farms">Farms</a>
-        <a href="/fields">Fields</a>
-        <a href="/crops">Crops</a>
-        <a href="/farm-inputs">Farm Inputs</a>
-    <% } %>
+
+
+    <a href="/pest-reports">Pest Reports</a>
+<a href="/weather-logs">Weather Logs</a>
 
     <a href="/logout">Logout</a>
 </nav>

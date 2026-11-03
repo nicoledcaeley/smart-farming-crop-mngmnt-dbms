@@ -14,7 +14,7 @@ router.get('/dashboard', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, r
         c.crop_name,
         c.category,
         COUNT(pr.pest_id) AS total_pest_reports,
-        MAX(pr.reported_date) AS latest_report_date
+        MAX(pr.reported_date) AS latest_reported_date
       FROM pest_reports pr
       RIGHT JOIN plantings p ON pr.planting_id = p.planting_id
       RIGHT JOIN crops c ON p.crop_id = c.crop_id
@@ -50,7 +50,7 @@ router.get('/reports', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res
       JOIN plantings p ON pr.planting_id = p.planting_id
       JOIN crops c ON p.crop_id = c.crop_id
       JOIN fields f ON p.field_id = f.field_id
-      ORDER BY pr.report_date DESC
+      ORDER BY pr.reported_date DESC
     `);
     const [plantings] = await db.query(`
       SELECT p.planting_id, c.crop_name, f.field_name 
@@ -67,11 +67,12 @@ router.get('/reports', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res
 
 // POST: Add pest report
 router.post('/pest-reports/add', async (req, res) => {
+  const { planting_id, pest_name, severity, reported_date, notes } = req.body;
   try {
     await db.query(
       `INSERT INTO pest_reports (planting_id, pest_name, severity, report_date, notes) 
        VALUES (?, ?, ?, ?, ?)`,
-      [planting_id, pest_name, severity, report_date, notes]
+      [planting_id, pest_name, severity, reported_date, notes]
     );
     res.redirect('/pest-reports');
   } catch (error) {
@@ -99,13 +100,13 @@ router.post('/pest-reports/delete/:id', allowRoles(['Admin', 'Staff', 'Farmer'])
 router.get('/weather-logs', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
   try {
     const [logs] = await db.query(`
-      SELECT wl.*, f.field_name 
+      SELECT wl.*, f.farm_name 
       FROM weather_logs wl
-      JOIN fields f ON wl.field_id = f.field_id
+      JOIN farms f ON wl.farm_id = f.farm_id
       ORDER BY wl.log_date DESC
     `);
-    const [fields] = await db.query('SELECT field_id, field_name FROM fields');
-    res.render('weather/index', { logs, fields });
+    const [farms] = await db.query('SELECT farm_id, farm_name FROM farms');
+    res.render('weather/index', { logs, farms });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error loading Weather Logs');
@@ -113,13 +114,13 @@ router.get('/weather-logs', allowRoles(['Admin', 'Staff', 'Farmer']), async (req
 });
 
 // POST: Add weather log
-router.post('/weather-logs/add', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {
-  const { field_id, temperature, humidity, rainfall, log_date } = req.body;
+router.post('/weather-logs/add', async (req, res) => {
+  const { farm_id, temperature, humidity, rainfall, log_date } = req.body;
   try {
     await db.query(
-      `INSERT INTO weather_logs (field_id, temperature, humidity, rainfall, log_date)
+      `INSERT INTO weather_logs (farm_id, temperature, humidity, rainfall, log_date)
        VALUES (?, ?, ?, ?, ?)`,
-      [field_id, temperature, humidity, rainfall, log_date]
+      [farm_id, temperature, humidity, rainfall, log_date]
     );
     res.redirect('/weather-logs');
   } catch (error) {
