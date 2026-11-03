@@ -1,8 +1,9 @@
+const { allowRoles } = require('../middleware/permissions');
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 
-router.get('/', async (req, res) => {
+router.get('/', allowRoles('Admin','Farm Manager','Farmer','Agronomist'), async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT r.*, f.field_name
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/field/:field_id', async (req, res) => {
+router.get('/field/:field_id', allowRoles('Admin','Farm Manager','Farmer','Agronomist'), async (req, res) => {
   try {
     const [rows] = await pool.query(
       'SELECT * FROM sensor_readings WHERE field_id = ? ORDER BY reading_time DESC',
@@ -30,7 +31,7 @@ router.get('/field/:field_id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', allowRoles('admin','manager'), async (req, res) => {
   const { field_id, metric, value } = req.body;
   const conn = await pool.getConnection();
   try {
