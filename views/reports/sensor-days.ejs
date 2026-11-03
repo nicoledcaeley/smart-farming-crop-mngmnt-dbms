@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sensor Coverage Gaps</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/menu') %>
+  <h1>Fields vs Weather Coverage Gaps (v_sensor_days)</h1>
+  <p>FULL OUTER JOIN as LEFT JOIN UNION RIGHT JOIN - MySQL has no FULL OUTER JOIN</p>
+  <table border="1" cellpadding="5">
+    <tr><th>Field</th><th>Reading Date</th><th>Weather Date</th><th>Gap Type</th></tr>
+    <% rows.forEach(r => { %>
+      <tr>
+        <td><%= r.field_name || r.field_id %></td>
+        <td><%= r.reading_date || 'NO READING' %></td>
+        <td><%= r.weather_date || 'NO WEATHER' %></td>
+        <td>
+          <% if (!r.reading_date) { %> weather only
+          <% } else if (!r.weather_date) { %> readings only
+          <% } else { %> both <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</body>
+</html>

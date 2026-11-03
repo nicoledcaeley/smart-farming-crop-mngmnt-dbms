@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
-
-const { allowRoles } = require('../middleware/auth');
-router.get('/coverage', async (req, res) => {
+const { allowRoles } = require('../middleware/permissions');
+router.get('/coverage',allowRoles('Admin','Farm Manager','Agronomist'), async (req, res) => {
   try {
+
+
+
     const [rows] = await pool.query(`
       SELECT f.field_id, f.field_name, v.day AS log_date,
       CASE WHEN v.day IS NULL THEN 'field only' WHEN f.field_id IS NULL THEN 'weather only' ELSE 'both' END AS coverage_type
