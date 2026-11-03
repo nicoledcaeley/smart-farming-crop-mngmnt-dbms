@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 
-const { allowRoles } = require('../middleware/auth');
+const { allowRoles } = require('../middleware/permissions');
 router.get('/coverage',allowRoles('Admin','Farm Manager','Agronomist'),  async (req, res) => {
   try {
     const [rows] = await pool.query(`
