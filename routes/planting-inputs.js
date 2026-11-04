@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { allowRoles } = require('../middleware/permissions');
 const db = require('../config/db');
 
 // Report: every planting with the total of each farm input used on it.
 // INNER JOIN: plantings + fields + crops (always exist)
 // LEFT JOIN: input_usage + farm_inputs (a planting with no inputs still shows)
-router.get('/', async (req, res) => {
+router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT p.planting_id, f.field_name, c.crop_name, p.status,

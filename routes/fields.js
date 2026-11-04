@@ -2,9 +2,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const { allowRoles } = require('../middleware/permissions');
 
 // READ: Display fields and their farm names
-router.get('/', async (req, res) => {
+router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const [fields] = await pool.query(`
             SELECT fields.*, farms.farm_name
@@ -29,7 +30,7 @@ router.get('/', async (req, res) => {
 });
 
 // CREATE: Add a new field
-router.post('/', async (req, res) => {
+router.post('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     const farm_id = Number(req.body.farm_id);
     const field_name = req.body.field_name?.trim();
     const area_ha = Number(req.body.area_ha);
@@ -124,7 +125,7 @@ router.post('/', async (req, res) => {
 });
 
 // UPDATE: Edit an existing field
-router.post('/:id/update', async (req, res) => {
+router.post('/:id/update', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const { farm_id, field_name, area_ha, soil_type, status } = req.body;
     const { id } = req.params;
 
@@ -152,7 +153,7 @@ router.post('/:id/update', async (req, res) => {
 });
 
 // DELETE: Remove an existing field
-router.post('/:id/delete', async (req, res) => {
+router.post('/:id/delete', allowRoles('Admin', 'Farm Manager'), async (req, res) => {
     const { id } = req.params;
 
     try {

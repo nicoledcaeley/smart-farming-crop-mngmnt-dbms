@@ -15,6 +15,7 @@
     </style>
 </head>
 <body>
+<%- include('partials/menu') %>
     <h2>Edit Planting #<%= planting.planting_id %></h2>
     <form action="/plantings/update/<%= planting.planting_id %>" method="POST">
         <% if (typeof error !== 'undefined' && error) { %><div class="error"><%= error %></div><% } %>
