@@ -8,7 +8,10 @@ router.get('/coverage',allowRoles('Admin','Farm Manager','Agronomist'), async (r
 
 
     const [rows] = await pool.query(`
-      SELECT f.field_id, f.field_name, v.day AS log_date,
+ 
+            SELECT f.field_id, f.field_name, v.day AS log_date,
+
+ 
       CASE WHEN v.day IS NULL THEN 'field only' WHEN f.field_id IS NULL THEN 'weather only' ELSE 'both' END AS coverage_type
       FROM fields f LEFT JOIN v_sensor_days v ON f.farm_id = v.farm_id
       UNION
