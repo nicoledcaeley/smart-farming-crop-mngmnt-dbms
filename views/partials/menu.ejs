@@ -18,10 +18,15 @@
             <% } %>
 
             <a href="/farms">Farms</a>
-
             <a href="/pest-reports">Pest Reports</a>
 
-            <a href="/weather-logs">Weather Logs</a>
+            <% if (['Admin', 'Farm Manager', 'Agronomist'].includes(userRole)) { %>
+                <a href="/reports/coverage">Coverage Report</a>
+            <% } %>
+
+            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+                <a href="/weather-logs">Weather Logs</a>
+            <% } %>
         </div>
 
         <div class="menu-account">
