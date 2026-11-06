@@ -1,25 +1,37 @@
-<% 
-    const userRole = sessionUser ? sessionUser.role_name : ''; 
+
+<%
+    const userRole = sessionUser ? sessionUser.role_name : '';
 %>
 
 <nav class="main-menu">
-    <a href="/">Home</a>
+    <div class="menu-container">
 
-    <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
-        <a href="/users">Users</a>
-    <% } %>
+        <div class="menu-links">
+            <a href="/">Home</a>
 
-    <% if (userRole === 'Admin') { %>
-        <a href="/roles">Roles</a>
-    <% } %>
+            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+                <a href="/users">Users</a>
+            <% } %>
 
-        <a href="/farms">Farms</a>
+            <% if (userRole === 'Admin') { %>
+                <a href="/roles">Roles</a>
+            <% } %>
 
-<a href="/reports/coverage">Pest Reports</a>
+            <a href="/farms">Farms</a>
+            <a href="/pest-reports">Pest Reports</a>
 
-<% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
-  <a href="/weather-logs">Weather Logs</a>
-<% } %>
+            <% if (['Admin', 'Farm Manager', 'Agronomist'].includes(userRole)) { %>
+                <a href="/reports/coverage">Coverage Report</a>
+            <% } %>
 
-    <a href="/logout">Logout</a>
+            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+                <a href="/weather-logs">Weather Logs</a>
+            <% } %>
+        </div>
+
+        <div class="menu-account">
+            <a href="/logout" class="logout-link">Logout</a>
+        </div>
+
+    </div>
 </nav>

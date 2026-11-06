@@ -1,29 +1,18 @@
+<%- include('partials/header') %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Smart Farming System</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-  <%- include('partials/header') %>
-    <h1>Smart Farming and Crop Management System</h1>
-<%- include('partials/menu') %>
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-label">WELCOME TO AGRIVANCE</p>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Role</th>
-            <th>Description</th>
-        </tr>
+            <h1>Grow Smarter. Farm Better.</h1>
 
-        <% roles.forEach(function(role) { %>
-            <tr>
-                <td><%= role.role_id %></td>
-                <td><%= role.role_name %></td>
-                <td><%= role.description %></td>
-            </tr>
-        <% }); %>
-    </table>
-</body>
-</html>
+            <p>
+                Manage your farms, monitor crop growth, and make
+                informed farming decisions with one smart system.
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<%- include('partials/footer') %>

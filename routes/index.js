@@ -10,20 +10,14 @@ router.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
 
+
 // Homepage
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
-    next();
-}, async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM roles');
-        res.render('index', { roles: rows });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Database error');
-    }
+
+    res.render('index');
 });
 // Plantings
 router.get('/plantings', (req, res, next) => {
