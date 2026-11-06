@@ -1,72 +1,371 @@
+
+/* =====================================
+   AGRIVANCE - GLOBAL DESIGN
+===================================== */
+
+:root {
+    --forest: #3e430a;
+    --sage: #5C8D50;
+    --light-green: #F3F7EF;
+    --soft-green: #E5EEDF;
+    --accent-yellow: #E7C66A;
+    --white: #FFFFFF;
+    --text: #26352A;
+    --muted: #718074;
+    --border: #DCE5D8;
+    --danger: #B94A48;
+    --shadow: 0 4px 15px rgba(36, 75, 53, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 20px;
+    font-family: 'Inter', Arial, sans-serif;
+    background-color: var(--light-green);
+    color: var(--text);
+    margin: 0;
+    padding: 24px;
+    line-height: 1.6;
 }
 
-h1 {
-    color: green;
-}
-
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-}
-
-th, td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: lightgreen;
-}
+/* =====================================
+   HEADER
+===================================== */
 
 .site-header {
-    background-color: #28643b;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 8px;
+    background: var(--forest);
+    color: var(--white);
+    padding: 24px 35px;
+    border-radius: 14px;
+    margin-bottom: 16px;
 }
 
-.site-header h1 {
-    color: white;
-    margin: 0;
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
 }
+
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.brand-icon {
+    width: 100px !important;
+    height: 100px !important;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.brand-logo {
+    width: 150px;
+    height: 200px;
+    object-fit: contain;
+    display: block;
+}
+
+.brand-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.brand-tagline {
+    color: #E4EEDB;
+    font-size: 13px;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* =====================================
+   NAVIGATION MENU
+===================================== */
 
 .main-menu {
-    background-color: #dcebdc;
-    padding: 12px;
-    margin: 15px 0;
-    border-radius: 8px;
+    background: var(--white);
+    padding: 12px 20px;
+    margin: 16px 0 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.menu-container {
     display: flex;
-    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.menu-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
 .main-menu a {
-    color: #28643b;
+    color: var(--forest);
     text-decoration: none;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: 8px;
+    transition: 0.2s ease;
 }
 
 .main-menu a:hover {
-    text-decoration: underline;
+    background: var(--soft-green);
+    color: var(--forest);
 }
 
+.main-menu .logout-link {
+    background: var(--forest);
+    color: var(--white);
+}
+
+.main-menu .logout-link:hover {
+    background: var(--sage);
+}
+
+/* =====================================
+   PAGE HEADINGS
+===================================== */
+
+h1, h2, h3, h4 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--forest);
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 23px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+/* =====================================
+   CONTENT CONTAINER
+===================================== */
+
+.container {
+    background: var(--white);
+    padding: 28px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+
+/* =====================================
+   TABLES
+===================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    margin-top: 15px;
+}
+
+th, td {
+    border-bottom: 1px solid var(--border);
+    padding: 13px 15px;
+    text-align: left;
+    font-size: 14px;
+}
+
+th {
+    background-color: var(--soft-green);
+    color: var(--forest);
+    font-weight: 700;
+}
+
+tr:hover td {
+    background-color: #F8FAF6;
+}
+
+/* =====================================
+   FORMS AND INPUTS
+===================================== */
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px 13px;
+    margin: 6px 0 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--white);
+    color: var(--text);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(92, 141, 80, 0.12);
+}
+
+label {
+    font-weight: 600;
+    color: var(--forest);
+    font-size: 14px;
+}
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+button, .btn {
+    display: inline-block;
+    background: var(--forest);
+    color: var(--white);
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover, .btn:hover {
+    background: var(--sage);
+}
+
+/* =====================================
+   LINKS
+===================================== */
+
+a {
+    color: var(--sage);
+}
+
+a:hover {
+    color: var(--forest);
+}
+
+/* =====================================
+   FOOTER
+===================================== */
+
 .site-footer {
-    margin-top: 25px;
-    padding: 15px;
+    margin-top: 30px;
+    padding: 20px;
     text-align: center;
-    color: #526354;
-    border-top: 1px solid #ccc;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.hero {
+    background-image:
+        linear-gradient(rgba(20, 45, 28, 0.50), rgba(20, 45, 28, 0.50)),
+        url('/images/farm-background.jpg');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 3px;
+    padding: 400px;
+    border-radius: 25px;
+
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.hero-content {
+    max-width: 200px;
+    max-height: 100px;
+}
+
+.hero h1 {
+    color: white;
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+/* Force AgriVance icon size */
+.site-header .brand-icon {
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    object-fit: contain;
+    display: block;
+}
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .site-header {
+        padding: 2px;
+    }
+
+    .header-container {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .menu-container {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .menu-links {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .main-menu a {
+        display: block;
+    }
+
+    .container {
+        padding: 18px;
+    }
+
+    table {
+        min-width: 600px;
+    }
 }
