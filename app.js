@@ -27,7 +27,7 @@ app.use('/roles', require('./routes/roles'));
 app.use('/farms', require('./routes/farms'));
 
 app.use('/', require('./routes/index'));
-app.use('/pest-reports', require('./routes/pestWeather'));
+app.use('/pest-reports', require('./routes/pestReports'));
 app.use('/weather-logs', require('./routes/pestWeather'));
 app.use('/growth-stages', require('./routes/growth-stages')); 
 app.use('/thresholds', require('./routes/thresholds'));

@@ -17,9 +17,9 @@ router.get('/weather-logs', async (req, res) => {
 });
 
 
-// ==========================================
+
 // 2. PEST REPORTS CRUD
-// ==========================================
+
 
 // GET: List all pest reports
 router.get('/reports', allowRoles(['Admin', 'Staff', 'Farmer']), async (req, res) => {

@@ -12,12 +12,17 @@ router.get('/login', (req, res) => {
 
 
 // Homepage
-router.get('/', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+router.get('/', async (req, res) => {
+    try {
+        // Fetch recent pest reports and weather logs
+        const [pestReports] = await pool.query('SELECT * FROM pest_reports ORDER BY reported_date DESC LIMIT 5');
+        const [weatherLogs] = await pool.query('SELECT * FROM weather_logs ORDER BY log_date DESC LIMIT 5');
 
-    res.render('index');
+        res.render('index', { pestReports, weatherLogs });
+    } catch (err) {
+        console.error(err);
+        res.render('index', { pestReports: [], weatherLogs: [] });
+    }
 });
 // Plantings
 router.get('/plantings', (req, res, next) => {
