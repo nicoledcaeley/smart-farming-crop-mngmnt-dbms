@@ -6,7 +6,7 @@ const { allowRoles } = require('../middleware/permissions');
 router.get('/', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT l.*, COALESCE(u.username, 'System') AS user_display
+      SELECT l.*, COALESCE(u.full_name, 'System') AS user_display
       FROM audit_logs l
       LEFT JOIN users u ON l.user_id = u.user_id
       ORDER BY l.created_at DESC
