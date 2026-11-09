@@ -1,6 +1,7 @@
 
 <%
-    const userRole = sessionUser ? sessionUser.role_name : '';
+    const currentUser = typeof sessionUser !== 'undefined' ? sessionUser : null;
+    const userRole = currentUser ? currentUser.role_name : '';
 %>
 
 <nav class="main-menu">
@@ -25,14 +26,23 @@
             <a href="/reports/planting-inputs">Planting Inputs Report</a>
 
 
+            <a href="/readings">Sensor Readings</a>
+            <a href="/alerts">Alerts</a>
+            <a href="/audit">Audit Logs</a>
+            <a href="/weather-logs">Weather Logs</a>
+
+            <a href="/growth-stages">Growth Stages</a>
+            <a href="/thresholds">Crop Thresholds</a>
+            <a href="/care-tasks">Care Tasks</a>
+            <a href="/reports/current-stage">Current Stage Report</a>
+            <a href="/reports/harvest-prediction">Harvest Prediction</a>
+
 
             <% if (['Admin', 'Farm Manager', 'Agronomist'].includes(userRole)) { %>
                 <a href="/reports/coverage">Coverage Report</a>
             <% } %>
 
-            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
-                <a href="/weather-logs">Weather Logs</a>
-            <% } %>
+        
         </div>
 
         <div class="menu-account">
