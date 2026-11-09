@@ -1,27 +1,22 @@
+<%- include('partials/header') %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Smart Farming System</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-    <h1>Smart Farming and Crop Management System</h1>
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-label">WELCOME TO AGRIVANCE</p>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Role</th>
-            <th>Description</th>
-        </tr>
+            <h1>Grow Smarter. Farm Better.</h1>
 
-        <% roles.forEach(function(role) { %>
-            <tr>
-                <td><%= role.role_id %></td>
-                <td><%= role.role_name %></td>
-                <td><%= role.description %></td>
-            </tr>
-        <% }); %>
-    </table>
-</body>
-</html>
+            <p>
+                Manage your farms, monitor crop growth, and make
+                informed farming decisions with one smart system.
+            </p>
+        </div>
+    </section>
+<div class="quick-links" style="margin-top: 30px; text-align: center;">
+    <a href="/weather-logs" class="btn" style="margin-right: 15px; padding: 10px 20px; background: #2e7d32; color: white; text-decoration: none; border-radius: 5px;">View Weather Logs</a>
+    <a href="/pest-reports" class="btn" style="padding: 10px 20px; background: #2e7d32; color: white; text-decoration: none; border-radius: 5px;">View Pest Reports</a>
+</div>
+
+</main>
+
+<%- include('partials/footer') %>

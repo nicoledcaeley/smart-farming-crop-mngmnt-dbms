@@ -1,0 +1,37 @@
+
+<%
+    const userRole = sessionUser ? sessionUser.role_name : '';
+%>
+
+<nav class="main-menu">
+    <div class="menu-container">
+
+        <div class="menu-links">
+            <a href="/">Home</a>
+
+            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+                <a href="/users">Users</a>
+            <% } %>
+
+            <% if (userRole === 'Admin') { %>
+                <a href="/roles">Roles</a>
+            <% } %>
+
+            <a href="/farms">Farms</a>
+            <a href="/pest-reports">Pest Reports</a>
+
+            <% if (['Admin', 'Farm Manager', 'Agronomist'].includes(userRole)) { %>
+                <a href="/reports/coverage">Coverage Report</a>
+            <% } %>
+
+            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
+                <a href="/weather-logs">Weather Logs</a>
+            <% } %>
+        </div>
+
+        <div class="menu-account">
+            <a href="/logout" class="logout-link">Logout</a>
+        </div>
+
+    </div>
+</nav>

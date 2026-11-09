@@ -57,7 +57,7 @@ app.use((req, res) => {
 // Error Handler
 app.use((err, req, res, next) => {
     console.error('Application error:', err);
-    res.status(500).send('<h1>REAL ERROR</h1><pre>'+err.message+'</pre>');
+    res.status(500).render('database-error');
 });
 // Automatically update growth stages
 async function runStageAdvancement() {

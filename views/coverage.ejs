@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>Coverage Gaps</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<body>
+<%- include('partials/header') %>
+<h1>Fields vs Weather Coverage Gaps (v_sensor_days)</h1>
+<p>FULL OUTER JOIN as LEFT JOIN UNION RIGHT JOIN - MySQL has no FULL OUTER JOIN. UNION not UNION ALL.</p>
+<table class="table">
+  <tr><th>Field ID</th><th>Field Name</th><th>Log Date</th><th>Type</th></tr>
+  <% coverage.forEach(c => { %>
+    <tr>
+      <td><%= c.field_id %></td>
+      <td><%= c.field_name %></td>
+      <td><%= c.log_date ? c.log_date.toISOString().split('T')[0] : 'NO DATE' %></td>
+      <td><%= c.coverage_type %></td>
+    </tr>
+  <% }) %>
+</table>
+</body>
+</html>
