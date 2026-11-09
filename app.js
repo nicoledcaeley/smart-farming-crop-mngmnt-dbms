@@ -59,11 +59,11 @@ app.use((err, req, res, next) => {
     console.error('Application error:', err);
     res.status(500).render('database-error');
 });
-// Automatically update growth stages
+
+ // Automatically update growth stages
 async function runStageAdvancement() {
     try {
         await advanceStages();
-        console.log('Growth stages checked successfully.');
     } catch (error) {
         console.error('Growth stage advancement failed:', error);
     }

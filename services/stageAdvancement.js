@@ -1,4 +1,3 @@
-
 const pool = require('../config/db');
 
 async function advanceStages() {
@@ -29,9 +28,6 @@ async function advanceStages() {
         ]);
 
         if (stages.length === 0) {
-            console.log(
-                `No matching stage found for planting ${planting.planting_id}.`
-            );
             continue;
         }
 
@@ -47,14 +43,6 @@ async function advanceStages() {
                 correctStage.stage_id,
                 planting.planting_id
             ]);
-
-            console.log(
-                `Planting ${planting.planting_id}: advanced to ${correctStage.stage_name}.`
-            );
-        } else {
-            console.log(
-                `Planting ${planting.planting_id}: already in ${correctStage.stage_name}.`
-            );
         }
     }
 }
