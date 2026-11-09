@@ -1,62 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Crops Management</title>
+<%- include('partials/header', { pageTitle: 'Crops Management' }) %>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background: #f3f7f1;
-            color: #243b2a;
-        }
-
-        h1, h2 {
-            color: #246b35;
-        }
-
-        form, table {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-        }
-
-        input, select, button {
-            padding: 10px;
-            margin: 5px 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background: #dcebd8;
-        }
-
-        .error {
-            color: red;
-        }
-    </style>
-</head>
-
-<body>
-
+<main class="page" id="main">
     <h1>Crops Management</h1>
-
-    <p><a href="/">Back to Home</a></p>
 
     <% if (error) { %>
         <p class="error"><%= error %></p>
@@ -66,44 +11,52 @@
 
     <form action="/crops" method="POST">
 
-        <label for="crop_name">Crop Name</label>
-        <input
-            id="crop_name"
-            name="crop_name"
-            maxlength="80"
-            required
-        >
+        <div class="field">
+            <label for="crop_name">Crop Name</label>
+            <input
+                id="crop_name"
+                name="crop_name"
+                maxlength="80"
+                required
+            >
+        </div>
 
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-            <option value="">Select category</option>
-            <option>Cereal</option>
-            <option>Vegetable</option>
-            <option>Fruit</option>
-            <option>Legume</option>
-            <option>Root crop</option>
-        </select>
+        <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select category</option>
+                <option>Cereal</option>
+                <option>Vegetable</option>
+                <option>Fruit</option>
+                <option>Legume</option>
+                <option>Root crop</option>
+            </select>
+        </div>
 
-        <label for="days_to_maturity">Days to Maturity</label>
-        <input
-            id="days_to_maturity"
-            name="days_to_maturity"
-            type="number"
-            min="1"
-            step="1"
-            required
-        >
+        <div class="field">
+            <label for="days_to_maturity">Days to Maturity</label>
+            <input
+                id="days_to_maturity"
+                name="days_to_maturity"
+                type="number"
+                min="1"
+                step="1"
+                required
+            >
+        </div>
 
-        <label for="expected_yield_kg_ha">
-            Expected Yield (kg/ha) - Optional
-        </label>
-        <input
-            id="expected_yield_kg_ha"
-            name="expected_yield_kg_ha"
-            type="number"
-            min="0.01"
-            step="0.01"
-        >
+        <div class="field">
+            <label for="expected_yield_kg_ha">
+                Expected Yield (kg/ha) - Optional
+            </label>
+            <input
+                id="expected_yield_kg_ha"
+                name="expected_yield_kg_ha"
+                type="number"
+                min="0.01"
+                step="0.01"
+            >
+        </div>
 
         <button type="submit">Add Crop</button>
 
@@ -111,116 +64,126 @@
 
     <h2>Existing Crops</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Crop Name</th>
-                <th>Category</th>
-                <th>Days to Maturity</th>
-                <th>Expected Yield (kg/ha)</th>
-<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
-    <th>Actions</th>
-<% } %>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <% crops.forEach(crop => { %>
-
+    <div class="table-wrap">
+        <table>
+            <thead>
                 <tr>
-                    <td><%= crop.crop_id %></td>
-                    <td><%= crop.crop_name %></td>
-                    <td><%= crop.category %></td>
-                    <td><%= crop.days_to_maturity %></td>
-                    <td>
-                        <%= crop.expected_yield_kg_ha ?? 'Not specified' %>
-                    </td>
-<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+                    <th>ID</th>
+                    <th>Crop Name</th>
+                    <th>Category</th>
+                    <th>Days to Maturity</th>
+                    <th>Expected Yield (kg/ha)</th>
+    <% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+        <th>Actions</th>
+    <% } %>
+                </tr>
+            </thead>
 
-                    <td>
-                        <button
-                            type="button"
-                            onclick="document.getElementById('edit-<%= crop.crop_id %>').hidden = !document.getElementById('edit-<%= crop.crop_id %>').hidden">
-                            Edit
-                        </button>
+            <tbody>
 
-                        <form
-                            action="/crops/<%= crop.crop_id %>/delete"
-                            method="POST"
-                            onsubmit="return confirm('Delete this crop?');">
+                <% crops.forEach(crop => { %>
 
-                            <button type="submit">Delete</button>
+                    <tr>
+                        <td><%= crop.crop_id %></td>
+                        <td><%= crop.crop_name %></td>
+                        <td><%= crop.category %></td>
+                        <td><%= crop.days_to_maturity %></td>
+                        <td>
+                            <%= crop.expected_yield_kg_ha ?? 'Not specified' %>
+                        </td>
+    <% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
 
-                        </form>
-                    </td>
-              <% } %>
-              </tr>
-<% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
-                <tr id="edit-<%= crop.crop_id %>" hidden>
-                    <td colspan="6">
-
-                        <form
-                            action="/crops/<%= crop.crop_id %>/update"
-                            method="POST">
-
-                            <label>Crop Name</label>
-                            <input
-                                name="crop_name"
-                                value="<%= crop.crop_name %>"
-                                maxlength="80"
-                                required
-                            >
-
-                            <label>Category</label>
-                            <select name="category" required>
-
-                                <% ['Cereal', 'Vegetable', 'Fruit', 'Legume', 'Root crop'].forEach(category => { %>
-
-                                    <option
-                                        value="<%= category %>"
-                                        <%= category === crop.category ? 'selected' : '' %>>
-                                        <%= category %>
-                                    </option>
-
-                                <% }) %>
-
-                            </select>
-
-                            <label>Days to Maturity</label>
-                            <input
-                                name="days_to_maturity"
-                                type="number"
-                                min="1"
-                                step="1"
-                                value="<%= crop.days_to_maturity %>"
-                                required
-                            >
-
-                            <label>Expected Yield (kg/ha) - Optional</label>
-                            <input
-                                name="expected_yield_kg_ha"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                value="<%= crop.expected_yield_kg_ha ?? '' %>"
-                            >
-
-                            <button type="submit">
-                                Save Changes
+                        <td>
+                            <button
+                                type="button"
+                                onclick="document.getElementById('edit-<%= crop.crop_id %>').hidden = !document.getElementById('edit-<%= crop.crop_id %>').hidden">
+                                Edit
                             </button>
 
-                        </form>
+                            <form
+                                action="/crops/<%= crop.crop_id %>/delete"
+                                method="POST"
+                                onsubmit="return confirm('Delete this crop?');">
 
-                    </td>
-                </tr>
+                                <button type="submit">Delete</button>
 
-<% } %>
-            <% }) %>
+                            </form>
+                        </td>
+                  <% } %>
+                  </tr>
+    <% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
+                    <tr id="edit-<%= crop.crop_id %>" hidden>
+                        <td colspan="6">
 
-        </tbody>
-    </table>
+                            <form
+                                action="/crops/<%= crop.crop_id %>/update"
+                                method="POST">
 
-</body>
-</html>
+                                <div class="field">
+                                    <label>Crop Name</label>
+                                    <input
+                                        name="crop_name"
+                                        value="<%= crop.crop_name %>"
+                                        maxlength="80"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="field">
+                                    <label>Category</label>
+                                    <select name="category" required>
+
+                                        <% ['Cereal', 'Vegetable', 'Fruit', 'Legume', 'Root crop'].forEach(category => { %>
+
+                                            <option
+                                                value="<%= category %>"
+                                                <%= category === crop.category ? 'selected' : '' %>>
+                                                <%= category %>
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label>Days to Maturity</label>
+                                    <input
+                                        name="days_to_maturity"
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        value="<%= crop.days_to_maturity %>"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="field">
+                                    <label>Expected Yield (kg/ha) - Optional</label>
+                                    <input
+                                        name="expected_yield_kg_ha"
+                                        type="number"
+                                        min="0.01"
+                                        step="0.01"
+                                        value="<%= crop.expected_yield_kg_ha ?? '' %>"
+                                    >
+                                </div>
+
+                                <button type="submit">
+                                    Save Changes
+                                </button>
+
+                            </form>
+
+                        </td>
+                    </tr>
+
+    <% } %>
+                <% }) %>
+
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

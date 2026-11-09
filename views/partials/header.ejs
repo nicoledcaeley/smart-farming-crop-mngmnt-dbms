@@ -1,30 +1,18 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>AgriVance | Farm and Crop Management</title>
-
-    <link rel="icon" type="image/png" href="/images/agrivance-icon.png">
-    <link rel="stylesheet" href="/style.css">
-</head>
+<%- include('head') %>
 <body>
 
-<header class="site-header">
-    <div class="header-container">
-        <a href="/" class="brand">
-            <img src="/images/agrivance-wordmark.png"
-                 alt="AgriVance"
-                 class="brand-logo">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" id="site-header">
+    <div class="site-header__inner">
+        <a class="brand" href="/">
+            <img src="/images/agrivance-wordmark.png" alt="AgriVance home">
         </a>
 
-        <p class="brand-tagline">
-            Grow Smarter. Farm Better.
-        </p>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+            Menu
+        </button>
 
+        <%- include('menu') %>
     </div>
 </header>
-
-<%- include('menu') %>

@@ -1,192 +1,59 @@
+<%- include('partials/header', { pageTitle: 'Growth Stages' }) %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Growth Stages</title>
-    <link rel="stylesheet" href="/style.css">
-
-    <style>
-        .actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .edit-btn,
-        .delete-btn,
-        .save-btn,
-        .cancel-btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .edit-btn,
-        .cancel-btn {
-            background: #fff;
-            color: #374151;
-            border: 1px solid #d1d5db;
-        }
-
-        .edit-btn:hover,
-        .cancel-btn:hover {
-            background: #f3f4f6;
-            border-color: #9ca3af;
-        }
-
-        .delete-btn {
-            background: #fff;
-            color: #b42318;
-            border: 1px solid #f0b4ae;
-        }
-
-        .delete-btn:hover {
-            background: #fef2f2;
-            border-color: #d92d20;
-        }
-
-        .save-btn {
-            background: #2563eb;
-            color: #fff;
-            border: 1px solid #2563eb;
-        }
-
-        .save-btn:hover {
-            background: #1d4ed8;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            background: rgba(17, 24, 39, 0.55);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #fff;
-            width: 100%;
-            max-width: 480px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 28px;
-            border-radius: 10px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .modal-content h2 {
-            margin: 0 0 8px;
-            color: #111827;
-        }
-
-        .modal-description {
-            margin-bottom: 24px;
-            color: #6b7280;
-            font-size: 14px;
-        }
-
-        .modal-content label {
-            display: block;
-            margin: 14px 0 6px;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .modal-content input,
-        .modal-content select {
-            box-sizing: border-box;
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .modal-content input:focus,
-        .modal-content select:focus {
-            outline: 2px solid #bfdbfe;
-            border-color: #2563eb;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 24px;
-        }
-
-        @media (max-width: 600px) {
-            .actions {
-                flex-wrap: wrap;
-            }
-
-            .modal-content {
-                padding: 20px;
-            }
-        }
-    </style>
-</head>
-
-<body>
+<main class="page" id="main">
     <h1>Crop Growth Stages</h1>
     <p>Manage the growth stages of each crop.</p>
-
-    <p><a href="/">Back to Home</a></p>
 
     <h2>Add Growth Stage</h2>
 
     <form action="/growth-stages" method="POST">
-        <label for="crop_id">Crop:</label>
-        <select name="crop_id" id="crop_id" required>
-            <option value="">Select a crop</option>
-            <% crops.forEach(function(crop) { %>
-                <option value="<%= crop.crop_id %>">
-                    <%= crop.crop_name %>
-                </option>
-            <% }); %>
-        </select>
+        <div class="field">
+            <label for="crop_id">Crop:</label>
+            <select name="crop_id" id="crop_id" required>
+                <option value="">Select a crop</option>
+                <% crops.forEach(function(crop) { %>
+                    <option value="<%= crop.crop_id %>">
+                        <%= crop.crop_name %>
+                    </option>
+                <% }); %>
+            </select>
+        </div>
 
-        <label for="stage_name">Stage Name:</label>
-        <input type="text" id="stage_name" name="stage_name" required>
+        <div class="field">
+            <label for="stage_name">Stage Name:</label>
+            <input type="text" id="stage_name" name="stage_name" required>
+        </div>
 
-        <label for="stage_order">Stage Order:</label>
-        <input type="number" id="stage_order" name="stage_order"
-               min="1" required>
+        <div class="field">
+            <label for="stage_order">Stage Order:</label>
+            <input type="number" id="stage_order" name="stage_order" min="1" required>
+        </div>
 
-        <label for="start_day">Start Day:</label>
-        <input type="number" id="start_day" name="start_day"
-               min="0" required>
+        <div class="field">
+            <label for="start_day">Start Day:</label>
+            <input type="number" id="start_day" name="start_day" min="0" required>
+        </div>
 
-        <label for="end_day">End Day:</label>
-        <input type="number" id="end_day" name="end_day"
-               min="0" required>
+        <div class="field">
+            <label for="end_day">End Day:</label>
+            <input type="number" id="end_day" name="end_day" min="0" required>
+        </div>
 
         <button type="submit">Add Growth Stage</button>
     </form>
 
     <h2>Existing Growth Stages</h2>
 
-    <table>
-        <thead>
+    <div class="table-wrap">
+        <table>
             <tr>
                 <th>Crop</th>
                 <th>Stage</th>
                 <th>Order</th>
                 <th>Start Day</th>
                 <th>End Day</th>
-                <th>Actions</th>
             </tr>
-        </thead>
 
-        <tbody>
             <% stages.forEach(function(stage) { %>
                 <tr>
                     <td><%= stage.crop_name %></td>
@@ -194,133 +61,10 @@
                     <td><%= stage.stage_order %></td>
                     <td><%= stage.start_day %></td>
                     <td><%= stage.end_day %></td>
-                    <td>
-                        <div class="actions">
-                            <button
-                                type="button"
-                                class="edit-btn"
-                                data-id="<%= stage.stage_id %>"
-                                data-crop-id="<%= stage.crop_id %>"
-                                data-stage-name="<%= stage.stage_name %>"
-                                data-stage-order="<%= stage.stage_order %>"
-                                data-start-day="<%= stage.start_day %>"
-                                data-end-day="<%= stage.end_day %>"
-                                onclick="openEditModal(this)">
-                                Edit
-                            </button>
-
-                            <form
-                                action="/growth-stages/<%= stage.stage_id %>/delete"
-                                method="POST"
-                                onsubmit="return confirm('Are you sure you want to delete this growth stage?');">
-
-                                <button type="submit" class="delete-btn">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
-                    </td>
                 </tr>
             <% }); %>
-        </tbody>
-    </table>
-
-    <div
-        id="editModal"
-        class="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="editModalTitle"
-        onclick="closeModalOnBackdrop(event)">
-
-        <div class="modal-content">
-            <h2 id="editModalTitle">Edit Growth Stage</h2>
-            <p class="modal-description">
-                Update the details for this growth stage.
-            </p>
-
-            <form id="editForm" method="POST">
-                <label for="edit_crop_id">Crop:</label>
-                <select name="crop_id" id="edit_crop_id" required>
-                    <% crops.forEach(function(crop) { %>
-                        <option value="<%= crop.crop_id %>">
-                            <%= crop.crop_name %>
-                        </option>
-                    <% }); %>
-                </select>
-
-                <label for="edit_stage_name">Stage Name:</label>
-                <input type="text" id="edit_stage_name"
-                       name="stage_name" required>
-
-                <label for="edit_stage_order">Stage Order:</label>
-                <input type="number" id="edit_stage_order"
-                       name="stage_order" min="1" required>
-
-                <label for="edit_start_day">Start Day:</label>
-                <input type="number" id="edit_start_day"
-                       name="start_day" min="0" required>
-
-                <label for="edit_end_day">End Day:</label>
-                <input type="number" id="edit_end_day"
-                       name="end_day" min="0" required>
-
-                <div class="modal-actions">
-                    <button type="button" class="cancel-btn"
-                            onclick="closeEditModal()">
-                        Cancel
-                    </button>
-
-                    <button type="submit" class="save-btn">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
-        </div>
+        </table>
     </div>
+</main>
 
-    <script>
-        function openEditModal(button) {
-            const modal = document.getElementById('editModal');
-            const form = document.getElementById('editForm');
-
-            form.action =
-                '/growth-stages/' + button.dataset.id + '/update';
-
-            document.getElementById('edit_crop_id').value =
-                button.dataset.cropId;
-
-            document.getElementById('edit_stage_name').value =
-                button.dataset.stageName;
-
-            document.getElementById('edit_stage_order').value =
-                button.dataset.stageOrder;
-
-            document.getElementById('edit_start_day').value =
-                button.dataset.startDay;
-
-            document.getElementById('edit_end_day').value =
-                button.dataset.endDay;
-
-            modal.style.display = 'flex';
-            document.getElementById('edit_stage_name').focus();
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-
-        function closeModalOnBackdrop(event) {
-            if (event.target === document.getElementById('editModal')) {
-                closeEditModal();
-            }
-        }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeEditModal();
-            }
-        });
-    </script>
-</body>
-</html>
+<%- include('partials/footer') %>

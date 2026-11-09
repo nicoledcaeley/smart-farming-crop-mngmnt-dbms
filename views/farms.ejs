@@ -1,85 +1,22 @@
+<%- include('partials/header', { pageTitle: 'Farms' }) %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Farms - Smart Farming System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f7f2;
-            margin: 0;
-            padding: 30px;
-            color: #26352a;
-        }
+<main class="page" id="main">
+    <h2>Farm Management</h2>
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-        }
+    <h3>Add New Farm</h3>
 
-        h1 {
-            color: #28643b;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #28643b;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background: #28643b;
-            color: white;
-        }
-
-        tr:hover {
-            background: #f0f7f0;
-        }
-
-        .active {
-            color: #16803c;
-            font-weight: bold;
-        }
-
-        .inactive {
-            color: #c0392b;
-            font-weight: bold;
-        }
-    </style>
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-
-    <%- include('partials/header') %>
-
-    <main class="container">
-        <h2>Farm Management</h2>
-
-        <h3>Add New Farm</h3>
-
-        <form action="/farms" method="POST">
+    <form action="/farms" method="POST">
+        <div class="field">
             <label for="farm_name">Farm Name:</label>
             <input type="text" id="farm_name" name="farm_name" required>
+        </div>
 
+        <div class="field">
             <label for="location">Location:</label>
             <input type="text" id="location" name="location" required>
+        </div>
 
+        <div class="field">
             <label for="total_area_ha">Total Area (hectares):</label>
             <input
                 type="number"
@@ -89,12 +26,14 @@
                 min="0.01"
                 required
             >
+        </div>
 
-            <button type="submit">Add Farm</button>
-        </form>
+        <button type="submit">Add Farm</button>
+    </form>
 
-        <h3>Farm List</h3>
+    <h3>Farm List</h3>
 
+    <div class="table-wrap">
         <table>
             <thead>
                 <tr>
@@ -120,21 +59,19 @@
                         <td><%= farm.farm_name %></td>
                         <td><%= farm.location %></td>
                         <td><%= farm.total_area_ha %></td>
-                        <td><%= farm.created_at %></td>
+                        <td><%= farm.created_at ? new Date(farm.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—' %></td>
                         <td>
     <% if (sessionUser && ['Admin', 'Farm Manager'].includes(sessionUser.role_name)) { %>
         <a href="/farms/<%= farm.farm_id %>/edit">Edit</a>
     <% } else { %>
         —
     <% } %>
-</td>
+    </td>
                     </tr>
                 <% }); %>
             </tbody>
         </table>
-    </main>
+    </div>
+</main>
 
-    <%- include('partials/footer') %>
-
-</body>
-</html>
+<%- include('partials/footer') %>
