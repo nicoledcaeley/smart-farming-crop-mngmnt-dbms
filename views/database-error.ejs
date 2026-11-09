@@ -1,11 +1,15 @@
-<%- include('partials/header') %>
+<%- include('partials/header', { pageTitle: 'Something went wrong' }) %>
 
-<div class="container">
-    <h1>Database Connection Error</h1>
-    <p>Sorry! We cannot connect to the database right now.</p>
-    <p>Please try again later or contact the system administrator.</p>
-
-    <a href="/" class="btn">Return to Home</a>
-</div>
+<main class="page" id="main">
+    <div class="state">
+        <div class="state__code">500</div>
+        <h1>The app couldn't finish that request</h1>
+        <p>This usually means the database isn't reachable. Try again in a moment. If it keeps happening, contact your system administrator.</p>
+        <div class="cta-row">
+            <button type="button" onclick="window.location.reload()">Try again</button>
+            <a href="/" class="btn btn--ghost">Back to home</a>
+        </div>
+    </div>
+</main>
 
 <%- include('partials/footer') %>

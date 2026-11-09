@@ -1,42 +1,41 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Smart Farming Crop Management SYSTEM</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
+<%- include('partials/head', { pageTitle: 'Log in' }) %>
 <body>
-    <main class="container">
-        <h1>Smart Farming Crop Management SYSTEM</h1>
-        <h2>Login to Your Account</h2>
-        <h3>hello!! hows your crops?</h3>
-        <p>Smart Farming and Crop Management System</p>
 
-        <% if (error) { %>
-            <p style="color: red;"><%= error %></p>
-        <% } %>
+<div class="auth">
+    <section class="auth__art">
+        <img src="/images/agrivance-wordmark.png" alt="AgriVance">
 
-        <form action="/login" method="POST">
-            <label for="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                required
-            >
+        <div>
+            <h2>Grow smarter. Farm better.</h2>
+            <p>Plan plantings, track inputs and harvests, and catch problems in the field early.</p>
+        </div>
+    </section>
 
-            <label for="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                required
-            >
+    <main class="auth__panel" id="main">
+        <div class="auth__box">
+            <h1>Log in</h1>
+            <p>Use the account your farm manager set up for you.</p>
 
-            <button type="submit">Login</button>
-        </form>
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="error" role="alert"><%= error %></div>
+            <% } %>
+
+            <form action="/login" method="POST">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" autocomplete="username" required autofocus>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" autocomplete="current-password" required>
+                </div>
+
+                <button type="submit" class="btn--wide">Log in</button>
+            </form>
+        </div>
     </main>
+</div>
+
 </body>
 </html>

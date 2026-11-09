@@ -1,53 +1,38 @@
-
 <%
-    const currentUser = typeof sessionUser !== 'undefined' ? sessionUser : null;
-    const userRole = currentUser ? currentUser.role_name : '';
+    const user   = typeof sessionUser !== 'undefined' ? sessionUser : null;
+    const groups = typeof navGroups !== 'undefined' ? navGroups : [];
+    const path   = typeof currentPath !== 'undefined' ? currentPath : '';
+
+    const isCurrent = (href) => path === href || path.startsWith(href + '/');
 %>
 
-<nav class="main-menu">
-    <div class="menu-container">
+<nav id="site-nav" class="site-nav" aria-label="Main">
+    <a href="/"<%- path === '/' ? ' aria-current="page"' : '' %>>Home</a>
 
-        <div class="menu-links">
-            <a href="/">Home</a>
+    <% groups.forEach((group) => { %>
+        <details class="nav-group<%= group.items.some((item) => isCurrent(item.href)) ? ' is-current' : '' %>">
+            <summary><%= group.label %></summary>
 
-            <% if (['Admin', 'Farm Manager'].includes(userRole)) { %>
-                <a href="/users">Users</a>
-            <% } %>
-
-            <% if (userRole === 'Admin') { %>
-                <a href="/roles">Roles</a>
-            <% } %>
-
-            <a href="/farms">Farms</a>
-            <a href="/pest-reports">Pest Reports</a>
-            <a href="/plantings">Plantings</a>
-            <a href="/harvests">Harvests</a>
-            <a href="/input-usage">Input Usage</a>		
-            <a href="/reports/planting-inputs">Planting Inputs Report</a>
-
-
-            <a href="/readings">Sensor Readings</a>
-            <a href="/alerts">Alerts</a>
-            <a href="/audit">Audit Logs</a>
-            <a href="/weather-logs">Weather Logs</a>
-
-            <a href="/growth-stages">Growth Stages</a>
-            <a href="/thresholds">Crop Thresholds</a>
-            <a href="/care-tasks">Care Tasks</a>
-            <a href="/reports/current-stage">Current Stage Report</a>
-            <a href="/reports/harvest-prediction">Harvest Prediction</a>
-
-
-            <% if (['Admin', 'Farm Manager', 'Agronomist'].includes(userRole)) { %>
-                <a href="/reports/coverage">Coverage Report</a>
-            <% } %>
-
-        
-        </div>
-
-        <div class="menu-account">
-            <a href="/logout" class="logout-link">Logout</a>
-        </div>
-
-    </div>
+            <div class="nav-menu">
+                <% group.items.forEach((item) => { %>
+                    <a href="<%= item.href %>"<%- isCurrent(item.href) ? ' aria-current="page"' : '' %>>
+                        <strong><%= item.label %></strong>
+                        <span><%= item.desc %></span>
+                    </a>
+                <% }); %>
+            </div>
+        </details>
+    <% }); %>
 </nav>
+
+<div class="account">
+    <% if (user) { %>
+        <div class="account__who">
+            <strong><%= user.full_name %></strong>
+            <small><%= user.role_name %></small>
+        </div>
+        <a href="/logout" class="btn btn--light">Log out</a>
+    <% } else { %>
+        <a href="/login" class="btn btn--light">Log in</a>
+    <% } %>
+</div>

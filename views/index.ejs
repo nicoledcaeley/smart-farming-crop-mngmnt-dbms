@@ -1,22 +1,136 @@
-<%- include('partials/header') %>
+<%- include('partials/header', { pageTitle: '' }) %>
+<%
+    const user = sessionUser;
+    const firstName = user ? String(user.full_name || '').trim().split(/\s+/)[0] : '';
+    const canOpen = (href) => navGroups.some((group) => group.items.some((item) => item.href === href));
+    const fmtDate = (value) => value
+        ? new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : '—';
+    const num = (value) => (value === null || value === undefined || value === '') ? '—' : value;
+%>
 
-    <section class="hero">
-        <div class="hero-content">
-            <p class="hero-label">WELCOME TO AGRIVANCE</p>
+<% if (!user) { %>
 
-            <h1>Grow Smarter. Farm Better.</h1>
-
-            <p>
-                Manage your farms, monitor crop growth, and make
-                informed farming decisions with one smart system.
-            </p>
+    <section class="hero hero--solo">
+        <div class="hero-card">
+            <h1>Grow smarter. Farm better.</h1>
+            <p>Manage your farms, monitor crop growth, and make informed decisions from one place.</p>
+            <div class="cta-row">
+                <a class="btn" href="/login">Log in</a>
+            </div>
         </div>
     </section>
-<div class="quick-links" style="margin-top: 30px; text-align: center;">
-    <a href="/weather-logs" class="btn" style="margin-right: 15px; padding: 10px 20px; background: #2e7d32; color: white; text-decoration: none; border-radius: 5px;">View Weather Logs</a>
-    <a href="/pest-reports" class="btn" style="padding: 10px 20px; background: #2e7d32; color: white; text-decoration: none; border-radius: 5px;">View Pest Reports</a>
-</div>
 
-</main>
+<% } else { %>
+
+    <section class="hero">
+        <div class="hero-card">
+            <h1>Welcome back, <%= firstName %></h1>
+            <p>Search for a page or report, or filter by area.</p>
+
+            <label class="search">
+                <span class="sr-only">Search pages and reports</span>
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" data-module-search autocomplete="off" placeholder="Try “harvest”, “pest” or “fields”">
+            </label>
+
+            <div class="chips" role="group" aria-label="Filter by area">
+                <button type="button" class="chip" data-chip="all" aria-pressed="true">All</button>
+                <% navGroups.forEach((group) => { %>
+                    <button type="button" class="chip" data-chip="<%= group.key %>" aria-pressed="false"><%= group.label %></button>
+                <% }); %>
+            </div>
+
+            <p class="hint">Press Enter to open the first match.</p>
+        </div>
+    </section>
+
+    <main class="page" id="main">
+
+        <% navGroups.forEach((group) => { %>
+            <section class="module-group" data-group="<%= group.key %>">
+                <h2><%= group.label %></h2>
+                <p><%= group.blurb %></p>
+
+                <div class="tile-grid">
+                    <% group.items.forEach((item) => { %>
+                        <a class="tile" href="<%= item.href %>"
+                           data-tile="<%= (item.label + ' ' + item.desc + ' ' + group.label).toLowerCase() %>">
+                            <span class="tile__icon"><%- group.icon %></span>
+                            <span>
+                                <strong><%= item.label %></strong>
+                                <span class="tile__desc"><%= item.desc %></span>
+                            </span>
+                        </a>
+                    <% }); %>
+                </div>
+            </section>
+        <% }); %>
+
+        <p class="no-results" data-no-results hidden>Nothing matches that search. Try a shorter word, or choose “All”.</p>
+
+        <section class="activity" aria-label="Recent activity">
+            <div>
+                <h2>Recent pest reports</h2>
+
+                <% if (pestReports && pestReports.length) { %>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr><th>Pest</th><th>Severity</th><th>Reported</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <% pestReports.forEach((report) => { %>
+                                    <tr>
+                                        <td><%= report.pest_name %></td>
+                                        <td><%= report.severity %></td>
+                                        <td><%= fmtDate(report.reported_date) %></td>
+                                        <td><%= report.status %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="empty">No pest reports yet.</p>
+                <% } %>
+
+                <p class="more-link"><a href="/pest-reports">View all pest reports</a></p>
+            </div>
+
+            <div>
+                <h2>Recent weather logs</h2>
+
+                <% if (weatherLogs && weatherLogs.length) { %>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr><th>Date</th><th>Rain (mm)</th><th>Temp (°C)</th><th>Humidity (%)</th></tr>
+                            </thead>
+                            <tbody>
+                                <% weatherLogs.forEach((log) => { %>
+                                    <tr>
+                                        <td><%= fmtDate(log.log_date) %></td>
+                                        <td><%= num(log.rainfall_mm) %></td>
+                                        <td><%= num(log.temperature_c) %></td>
+                                        <td><%= num(log.humidity_pct) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="empty">No weather logs yet.</p>
+                <% } %>
+
+                <% if (canOpen('/weather-logs')) { %>
+                    <p class="more-link"><a href="/weather-logs">View all weather logs</a></p>
+                <% } %>
+            </div>
+        </section>
+
+    </main>
+
+<% } %>
 
 <%- include('partials/footer') %>

@@ -1,20 +1,10 @@
+<%- include('partials/header', { pageTitle: 'Edit Farm' }) %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Farm - Smart Farming System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
+<main class="page" id="main">
+    <h2>Edit Farm</h2>
 
-    <%- include('partials/header') %>
-    <%- include('partials/menu') %>
-
-    <main class="container">
-        <h2>Edit Farm</h2>
-
-        <form action="/farms/<%= farm.farm_id %>/edit" method="POST">
+    <form action="/farms/<%= farm.farm_id %>/edit" method="POST">
+        <div class="field">
             <label for="farm_name">Farm Name:</label>
             <input
                 type="text"
@@ -23,7 +13,9 @@
                 value="<%= farm.farm_name %>"
                 required
             >
+        </div>
 
+        <div class="field">
             <label for="location">Location:</label>
             <input
                 type="text"
@@ -32,7 +24,9 @@
                 value="<%= farm.location %>"
                 required
             >
+        </div>
 
+        <div class="field">
             <label for="total_area_ha">Total Area (hectares):</label>
             <input
                 type="number"
@@ -43,13 +37,11 @@
                 value="<%= farm.total_area_ha %>"
                 required
             >
+        </div>
 
-            <button type="submit">Update Farm</button>
-            <a href="/farms">Cancel</a>
-        </form>
-    </main>
+        <button type="submit">Update Farm</button>
+        <a class="btn btn--ghost" href="/farms">Cancel</a>
+    </form>
+</main>
 
-    <%- include('partials/footer') %>
-
-</body>
-</html>
+<%- include('partials/footer') %>

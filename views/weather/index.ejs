@@ -1,67 +1,65 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Weather Logs Entry</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
- <%- include('../partials/header') %>
-  <h1>Weather Logs</h1>
+<%- include('../partials/header', { pageTitle: 'Weather Logs Entry' }) %>
 
-  <h3>Record Daily Weather Reading</h3>
-  <form action="/weather-logs/add" method="POST">
-    <label>Target Field:</label>
-    <select name="farm_id" required>
-      <% farms.forEach(f => { %>
-        <option value="<%= f.farm_id %>"><%= f.farm_name %></option>
-      <% }) %>
-    </select><br><br>
+<main class="page" id="main">
+     <h1>Weather Logs</h1>
 
+    <h3>Record Daily Weather Reading</h3>
+    <form action="/weather-logs/add" method="POST">
+      <div class="field">
+          <label>Target Field:</label>
+          <select name="farm_id" required>
+            <% farms.forEach(f => { %>
+              <option value="<%= f.farm_id %>"><%= f.farm_name %></option>
+            <% }) %>
+          </select>
+      </div><div class="field">
     <label>Temperature (°C):</label>
-    <input type="number" step="0.1" name="temperature" required><br><br>
-
+    <input type="number" step="0.1" name="temperature" required>
+</div><div class="field">
     <label>Humidity (%):</label>
-    <input type="number" step="0.1" name="humidity" required><br><br>
-
+    <input type="number" step="0.1" name="humidity" required>
+</div><div class="field">
     <label>Rainfall (mm):</label>
-    <input type="number" step="0.1" name="rainfall" required><br><br>
-
+    <input type="number" step="0.1" name="rainfall" required>
+</div><div class="field">
     <label>Log Date:</label>
-    <input type="date" name="log_date" required><br><br>
+    <input type="date" name="log_date" required>
+</div><button type="submit">Save Log</button>
+    </form>
 
-    <button type="submit">Save Log</button>
-  </form>
+    <h3>Recorded Weather Logs</h3>
+    <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Log ID</th>
+              <th>Farm</th>
+              <th>Temp (°C)</th>
+              <th>Humidity (%)</th>
+              <th>Rainfall (mm)</th>
+              <th>Log Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% logs.forEach(l => { %>
+              <tr>
+                <td><%= l.log_id %></td>
+                <td><%= l.farm_name %></td>
+                <td><%= l.temperature %></td>
+                <td><%= l.humidity %></td>
+                <td><%= l.rainfall %></td>
+                <td><%= new Date(l.log_date).toLocaleDateString() %></td>
+                <td>
+                  <form action="/weather-logs/delete/<%= l.log_id %>" method="POST">
+                    <button type="submit" onclick="return confirm('Delete entry?')">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+    </div>
+</main>
 
-  <h3>Recorded Weather Logs</h3>
-  <table border="1" cellpadding="8">
-    <thead>
-      <tr>
-        <th>Log ID</th>
-        <th>Farm</th>
-        <th>Temp (°C)</th>
-        <th>Humidity (%)</th>
-        <th>Rainfall (mm)</th>
-        <th>Log Date</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% logs.forEach(l => { %>
-        <tr>
-          <td><%= l.log_id %></td>
-          <td><%= l.farm_name %></td>
-          <td><%= l.temperature %></td>
-          <td><%= l.humidity %></td>
-          <td><%= l.rainfall %></td>
-          <td><%= new Date(l.log_date).toLocaleDateString() %></td>
-          <td>
-            <form action="/weather-logs/delete/<%= l.log_id %>" method="POST" style="display:inline;">
-              <button type="submit" onclick="return confirm('Delete entry?')">Delete</button>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
-</body>
-</html>
+<%- include('../partials/footer') %>

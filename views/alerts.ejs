@@ -1,32 +1,90 @@
-<!DOCTYPE html>
-<html>
-<head><title>Alerts</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
-<%- include('partials/menu') %>
-<div class="container mt-4">
-<h2>Alerts</h2>
-<form method="GET" class="card p-3 mb-4">
-<div class="row">
-<div class="col-md-4">
-<select name="status" class="form-control">
-<option value="">All Status</option>
-<option value="Pending">Pending</option>
-<option value="Acknowledged">Acknowledged</option>
-<option value="Resolved">Resolved</option>
-</select>
-</div>
-<div class="col-md-2">
-<button class="btn btn-primary">Filter</button>
-</div>
-</div>
-</form>
-<table class="table table-bordered">
-<tr><th>ID</th><th>Message</th><th>Severity</th><th>Status</th><th>Action</th></tr>
-<tr><td colspan="5">No alerts yet</td></tr>
-</table>
-<a href="/" class="btn btn-secondary">Back</a>
-</div>
-</body>
-</html>
+<%- include('partials/header', { pageTitle: 'Alerts' }) %>
+
+<main class="page" id="main">
+    <h1>Alerts</h1>
+    <p>Threshold breaches from sensor readings. Acknowledge an alert once someone is on it, and resolve it when the problem is fixed.</p>
+
+    <%
+        const f = (typeof filters !== 'undefined' && filters) ? filters : {};
+        const hasFilters = Boolean(f.status || f.severity);
+    %>
+
+    <form method="GET" action="/alerts" class="filters">
+        <div class="field">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="">All statuses</option>
+                <% ['Open', 'Acknowledged', 'Resolved'].forEach((s) => { %>
+                    <option value="<%= s %>" <%= f.status === s ? 'selected' : '' %>><%= s %></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="severity">Severity</label>
+            <select id="severity" name="severity">
+                <option value="">All severities</option>
+                <% ['Low', 'Medium', 'High'].forEach((s) => { %>
+                    <option value="<%= s %>" <%= f.severity === s ? 'selected' : '' %>><%= s %></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <button type="submit">Apply filters</button>
+        <% if (hasFilters) { %>
+            <a class="btn btn--ghost" href="/alerts">Clear filters</a>
+        <% } %>
+    </form>
+
+    <h2>Alert list</h2>
+
+    <% if (alerts && alerts.length) { %>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Field</th>
+                        <th>Message</th>
+                        <th>Reading</th>
+                        <th>Severity</th>
+                        <th>Status</th>
+                        <th>Raised</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% alerts.forEach((alert) => { %>
+                        <tr>
+                            <td><%= alert.alert_id %></td>
+                            <td><%= alert.field_name || '—' %></td>
+                            <td><%= alert.message %></td>
+                            <td><%= alert.metric ? String(alert.metric).replace('_', ' ') + ': ' + alert.value : '—' %></td>
+                            <td><%= alert.severity %></td>
+                            <td><%= alert.status %></td>
+                            <td><%= new Date(alert.created_at).toLocaleString() %></td>
+                            <td>
+                                <% if (alert.status === 'Open') { %>
+                                    <form action="/alerts/acknowledge/<%= alert.alert_id %>" method="POST">
+                                        <button type="submit">Acknowledge</button>
+                                    </form>
+                                <% } %>
+                                <% if (alert.status !== 'Resolved') { %>
+                                    <form action="/alerts/resolve/<%= alert.alert_id %>" method="POST">
+                                        <button type="submit">Resolve</button>
+                                    </form>
+                                <% } else { %>
+                                    —
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <p class="empty"><%= hasFilters ? 'No alerts match these filters.' : 'No alerts yet. They appear here when a sensor reading goes outside a crop threshold.' %></p>
+    <% } %>
+</main>
+
+<%- include('partials/footer') %>

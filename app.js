@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 
 const advanceStages = require('./services/stageAdvancement');
+const { navFor } = require('./config/navigation');
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.use(session({
 }));
 app.use((req, res, next) => {
     res.locals.sessionUser = req.session.user || null;
+    res.locals.navGroups = navFor(res.locals.sessionUser);
+    res.locals.currentPath = req.path;
     next();
 });
 app.use('/roles', require('./routes/roles'));
@@ -59,11 +62,11 @@ app.use((err, req, res, next) => {
     console.error('Application error:', err);
     res.status(500).render('database-error');
 });
-
- // Automatically update growth stages
+// Automatically update growth stages
 async function runStageAdvancement() {
     try {
         await advanceStages();
+        console.log('Growth stages checked successfully.');
     } catch (error) {
         console.error('Growth stage advancement failed:', error);
     }

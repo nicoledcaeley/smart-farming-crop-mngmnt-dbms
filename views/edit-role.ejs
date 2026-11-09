@@ -1,20 +1,10 @@
+<%- include('partials/header', { pageTitle: 'Edit Role' }) %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Role - Smart Farming System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
+<main class="page" id="main">
+    <h2>Edit Role</h2>
 
-    <%- include('partials/header') %>
-    <%- include('partials/menu') %>
-
-    <main class="container">
-        <h2>Edit Role</h2>
-
-        <form action="/roles/<%= role.role_id %>/edit" method="POST">
+    <form action="/roles/<%= role.role_id %>/edit" method="POST">
+        <div class="field">
             <label for="role_name">Role Name:</label>
             <input
                 type="text"
@@ -23,7 +13,9 @@
                 value="<%= role.role_name %>"
                 required
             >
+        </div>
 
+        <div class="field">
             <label for="description">Description:</label>
             <input
                 type="text"
@@ -31,13 +23,11 @@
                 name="description"
                 value="<%= role.description || '' %>"
             >
+        </div>
 
-            <button type="submit">Update Role</button>
-            <a href="/roles">Cancel</a>
-        </form>
-    </main>
+        <button type="submit">Update Role</button>
+        <a class="btn btn--ghost" href="/roles">Cancel</a>
+    </form>
+</main>
 
-    <%- include('partials/footer') %>
-
-</body>
-</html>
+<%- include('partials/footer') %>
