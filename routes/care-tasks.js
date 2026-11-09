@@ -113,7 +113,50 @@ router.post('/:task_id/status', allowRoles('Admin', 'Farm Manager', 'Farmer', 'A
     }
 });
 
-// 4. Delete a care task
+ // 4. Update a care task
+router.post('/:task_id/update', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
+    try {
+        const { task_id } = req.params;
+        const { planting_id, task_type, due_date, assigned_to } = req.body;
+
+        if (!planting_id || !task_type || !due_date) {
+            return res.status(400).send('Planting, task type, and due date are required.');
+        }
+
+        const allowedTaskTypes = [
+            'Irrigation',
+            'Fertilizing',
+            'Pest control',
+            'Weeding',
+            'Other'
+        ];
+
+        if (!allowedTaskTypes.includes(task_type)) {
+            return res.status(400).send('Invalid task type.');
+        }
+
+        const [result] = await pool.query(
+            `UPDATE care_tasks
+             SET planting_id = ?,
+                 task_type = ?,
+                 due_date = ?,
+                 assigned_to = ?
+             WHERE task_id = ?`,
+            [planting_id, task_type, due_date, assigned_to || null, task_id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Care task not found.');
+        }
+
+        res.redirect('/care-tasks');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Could not update care task.');
+    }
+});
+
+// 5. Delete a care task
 router.post('/:task_id/delete', allowRoles('Admin', 'Farm Manager', 'Farmer', 'Agronomist'), async (req, res) => {
     try {
         const { task_id } = req.params;
