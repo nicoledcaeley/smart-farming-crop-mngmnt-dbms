@@ -3,11 +3,8 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 
-console.log('Crop Thresholds route loaded');
-
 // Display the Crop Thresholds page
 router.get('/', async (req, res) => {
-    console.log('GET /thresholds route reached');
     
     try {
         const [crops] = await pool.query(
