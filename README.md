@@ -54,7 +54,7 @@ Open the folder in CMD (Command Prompt) or your terminal.
 ### Step 2. Clone the Repository
 Run the following command:
 ```bash
-git clone [https://github.com/franklinriofrir16-bot/smart-farming-system.git](https://github.com/franklinriofrir16-bot/smart-farming-system.git) .
+git clone [https://github.com/nicoledcaeley/smart-farming-crop-mngmnt-dbms.git](https://github.com/nicoledcaeley/smart-farming-crop-mngmnt-dbms.git) .
 ```
 
 ### Step 3. Install Dependencies
