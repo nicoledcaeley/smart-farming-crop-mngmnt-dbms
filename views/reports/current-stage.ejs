@@ -1,4 +1,83 @@
+
 <%- include('../partials/header', { pageTitle: 'Current Stage per Planting Report' }) %>
+
+<style>
+    .report-info {
+        margin-top: 20px;
+        padding: 12px 16px;
+        background: #e4efdf;
+        border-left: 4px solid #43865b;
+        border-radius: 4px;
+    }
+
+    .report-table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 18px;
+    }
+
+    .report-table-container table {
+        width: 100%;
+        min-width: 750px;
+        border-collapse: collapse;
+    }
+
+    .report-table-container th,
+    .report-table-container td {
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .report-table-container th {
+        white-space: nowrap;
+    }
+
+    .report-center {
+        text-align: center !important;
+    }
+
+    .report-date {
+        white-space: nowrap;
+    }
+
+    .report-stage-name {
+        font-weight: 600;
+    }
+
+    .report-status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .report-status-active {
+        color: #216b3b;
+        background: #e0f3e5;
+    }
+
+    .report-status-harvested {
+        color: #2457a6;
+        background: #e2ecff;
+    }
+
+    .report-status-pending {
+        color: #895b08;
+        background: #fff1cc;
+    }
+
+    .report-status-default {
+        color: #4b5563;
+        background: #e9edf0;
+    }
+
+    .report-empty {
+        padding: 20px;
+    }
+</style>
 
 <main class="page" id="main">
     <h1>Current Stage per Planting Report</h1>
@@ -8,35 +87,99 @@
         expected harvest date, current growth stage, and status.
     </p>
 
+    <%
+        function formatReportDate(value) {
+            if (value === null || value === undefined || value === '') {
+                return 'Not set';
+            }
+
+            const raw = String(value);
+            const dateOnlyMatch = raw.match(/^(\d{4}-\d{2}-\d{2})/);
+
+            if (dateOnlyMatch) {
+                return dateOnlyMatch[1];
+            }
+
+            const date = value instanceof Date ? value : new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return raw;
+            }
+
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}-${month}-${day}`;
+        }
+
+        function getReportStatusClass(status) {
+            const normalized = String(status || '').toLowerCase();
+
+            if (normalized === 'active') return 'report-status-active';
+            if (normalized === 'harvested') return 'report-status-harvested';
+            if (normalized === 'pending') return 'report-status-pending';
+
+            return 'report-status-default';
+        }
+    %>
+
     <% if (plantings.length === 0) { %>
-        <p class="empty">No planting records found.</p>
+        <p class="report-empty">No planting records found.</p>
     <% } else { %>
-        <div class="table-wrap">
+
+        <p class="report-info">
+            <strong>Total Plantings:</strong> <%= plantings.length %>
+        </p>
+
+        <div class="report-table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Planting ID</th>
+                        <th class="report-center">Planting ID</th>
                         <th>Crop</th>
                         <th>Planting Date</th>
                         <th>Expected Harvest</th>
                         <th>Current Stage</th>
-                        <th>Stage Order</th>
+                        <th class="report-center">Stage Order</th>
                         <th>Status</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <% plantings.forEach(planting => { %>
+                    <% plantings.forEach(function(planting) { %>
                         <tr>
-                            <td><%= planting.planting_id %></td>
-                            <td><%= planting.crop_name %></td>
-                            <td><%= planting.planting_date %></td>
-                            <td><%= planting.expected_harvest_date || 'Not set' %></td>
-                            <td><%= planting.current_stage || 'Not assigned' %></td>
-                            <td><%= planting.stage_order ?? '—' %></td>
-                            <td><%= planting.status %></td>
+                            <td class="report-center">
+                                <%= planting.planting_id %>
+                            </td>
+
+                            <td>
+                                <%= planting.crop_name || 'Unknown crop' %>
+                            </td>
+
+                            <td class="report-date">
+                                <%= formatReportDate(planting.planting_date) %>
+                            </td>
+
+                            <td class="report-date">
+                                <%= formatReportDate(planting.expected_harvest_date) %>
+                            </td>
+
+                            <td class="report-stage-name">
+                                <%= planting.current_stage || 'Not assigned' %>
+                            </td>
+
+                            <td class="report-center">
+                                <%= planting.stage_order ?? '—' %>
+                            </td>
+
+                            <td>
+                                <span class="report-status <%= getReportStatusClass(planting.status) %>">
+                                    <%= planting.status || 'Unknown' %>
+                                </span>
+                            </td>
                         </tr>
-                    <% }) %>
+                    <% }); %>
                 </tbody>
             </table>
         </div>
