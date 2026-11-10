@@ -1,80 +1,169 @@
-<%- include('partials/header', { pageTitle: 'Crop Thresholds' }) %>
 
-<main class="page" id="main">
-    <h1>Crop Thresholds</h1>
-    <p>Manage the minimum and maximum values for each crop metric.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Thresholds</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Crop Thresholds</h1>
+        <p>Manage the minimum and maximum values for each crop metric.</p>
 
-    <h2>Add Crop Threshold</h2>
+        <h2>Add Crop Threshold</h2>
 
-    <form action="/thresholds" method="POST">
-        <div class="field">
+        <form action="/thresholds" method="POST">
             <label for="crop_id">Crop:</label>
-            <select name="crop_id" id="crop_id" required>
+            <select id="crop_id" name="crop_id" required>
                 <option value="">Select a crop</option>
-                <% crops.forEach(function(crop) { %>
+                <% crops.forEach(crop => { %>
                     <option value="<%= crop.crop_id %>">
                         <%= crop.crop_name %>
                     </option>
-                <% }); %>
+                <% }) %>
             </select>
-        </div>
 
-        <div class="field">
             <label for="metric">Metric:</label>
-            <select name="metric" id="metric" required>
-                <option value="">Select a metric</option>
+            <select id="metric" name="metric" required>
                 <option value="soil_moisture">Soil Moisture</option>
                 <option value="temperature">Temperature</option>
                 <option value="ph">pH</option>
             </select>
-        </div>
 
-        <div class="field">
             <label for="min_value">Minimum Value:</label>
             <input
                 type="number"
                 id="min_value"
                 name="min_value"
-                step="0.01"
+                step="any"
                 required
             >
-        </div>
 
-        <div class="field">
             <label for="max_value">Maximum Value:</label>
             <input
                 type="number"
                 id="max_value"
                 name="max_value"
-                step="0.01"
+                step="any"
                 required
             >
-        </div>
 
-        <button type="submit">Add Threshold</button>
-    </form>
+            <button type="submit">Add Threshold</button>
+        </form>
 
-    <h2>Existing Crop Thresholds</h2>
+        <h2>Existing Crop Thresholds</h2>
 
-    <div class="table-wrap">
         <table>
-            <tr>
-                <th>Crop</th>
-                <th>Metric</th>
-                <th>Minimum</th>
-                <th>Maximum</th>
-            </tr>
-
-            <% thresholds.forEach(function(threshold) { %>
+            <thead>
                 <tr>
-                    <td><%= threshold.crop_name %></td>
-                    <td><%= threshold.metric %></td>
-                    <td><%= threshold.min_value %></td>
-                    <td><%= threshold.max_value %></td>
+                    <th>Crop</th>
+                    <th>Metric</th>
+                    <th>Minimum</th>
+                    <th>Maximum</th>
+                    <th>Action</th>
                 </tr>
-            <% }); %>
-        </table>
-    </div>
-</main>
+            </thead>
 
-<%- include('partials/footer') %>
+            <tbody>
+                <% thresholds.forEach(threshold => { %>
+                    <tr>
+                        <td><%= threshold.crop_name %></td>
+                        <td><%= threshold.metric %></td>
+                        <td><%= threshold.min_value %></td>
+                        <td><%= threshold.max_value %></td>
+
+                        <td>
+                            <button
+                                type="button"
+                                onclick="editThreshold(
+                                    '<%= threshold.threshold_id %>',
+                                    '<%= threshold.crop_id %>',
+                                    '<%= threshold.metric %>',
+                                    '<%= threshold.min_value %>',
+                                    '<%= threshold.max_value %>'
+                                )"
+                            >
+                                Edit
+                            </button>
+
+                            <form
+                                action="/thresholds/<%= threshold.threshold_id %>/delete"
+                                method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this threshold?');"
+                            >
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <section id="editSection" hidden>
+            <h2>Edit Crop Threshold</h2>
+
+            <form id="editForm" method="POST">
+                <label for="edit_crop_id">Crop:</label>
+                <select id="edit_crop_id" name="crop_id" required>
+                    <% crops.forEach(crop => { %>
+                        <option value="<%= crop.crop_id %>">
+                            <%= crop.crop_name %>
+                        </option>
+                    <% }) %>
+                </select>
+
+                <label for="edit_metric">Metric:</label>
+                <select id="edit_metric" name="metric" required>
+                    <option value="soil_moisture">Soil Moisture</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="ph">pH</option>
+                </select>
+
+                <label for="edit_min_value">Minimum Value:</label>
+                <input
+                    type="number"
+                    id="edit_min_value"
+                    name="min_value"
+                    step="any"
+                    required
+                >
+
+                <label for="edit_max_value">Maximum Value:</label>
+                <input
+                    type="number"
+                    id="edit_max_value"
+                    name="max_value"
+                    step="any"
+                    required
+                >
+
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="closeEdit()">Cancel</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        function editThreshold(id, cropId, metric, minValue, maxValue) {
+            document.getElementById('editForm').action =
+                '/thresholds/' + id + '/update';
+
+            document.getElementById('edit_crop_id').value = cropId;
+            document.getElementById('edit_metric').value = metric;
+            document.getElementById('edit_min_value').value = minValue;
+            document.getElementById('edit_max_value').value = maxValue;
+
+            document.getElementById('editSection').hidden = false;
+            document.getElementById('editSection').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function closeEdit() {
+            document.getElementById('editSection').hidden = true;
+        }
+    </script>
+</body>
+</html>
