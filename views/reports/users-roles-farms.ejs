@@ -1,37 +1,36 @@
+<%- include('../partials/header', { pageTitle: '' }) %>
 
-<%- include('../partials/header') %>
+<main class="page" id="main">
+    <a class="back-link" href="/users">&larr; Back to Users</a>
+        <h1>Users, Roles, and Farms Report</h1>
 
-<div class="container">
-    <h1>Users, Roles, and Farms Report</h1>
+        <p>List of users, their assigned roles, and farms.</p>
 
-    <p>List of users, their assigned roles, and farms.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Farm</th>
+                    </tr>
+                </thead>
 
-    <table>
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Farm</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <% report.forEach(user => { %>
-                <tr>
-                    <td><%= user.user_id %></td>
-                    <td><%= user.full_name %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.role_name %></td>
-                    <td><%= user.farm_name || 'Not Assigned' %></td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-
-    <br>
-    <a href="/users">Back to Users</a>
-</div>
+                <tbody>
+                    <% report.forEach(user => { %>
+                        <tr>
+                            <td><%= user.user_id %></td>
+                            <td><%= user.full_name %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.role_name %></td>
+                            <td><%= user.farm_name || 'Not Assigned' %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+</main>
 
 <%- include('../partials/footer') %>

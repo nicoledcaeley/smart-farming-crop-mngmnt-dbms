@@ -1,56 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Sensor Readings</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-4">
-<h3>Sensor Readings</h3>
+<%- include('partials/header', { pageTitle: 'Sensor readings' }) %>
 
-<form method="POST" action="/readings" class="row g-2 mb-4">
-<div class="col-md-3">
-<select name="field_id" class="form-control" required>
-<option value="">Select Field</option>
-<% if (typeof fields !== 'undefined') { %>
-  <% fields.forEach(f => { %>
-    <option value="<%= f.field_id %>"><%= f.field_name %></option>
-  <% }) %>
-<% } %>
-</select>
-</div>
-<div class="col-md-3">
-<select name="metric" class="form-control" required>
-<option value="soil_moisture">soil_moisture</option>
-<option value="temperature">temperature</option>
-<option value="humidity">humidity</option>
-</select>
-</div>
-<div class="col-md-2">
-<input type="number" step="0.01" name="value" class="form-control" placeholder="Value" required>
-</div>
-<div class="col-md-2">
-<button class="btn btn-primary w-100">Add</button>
-</div>
-</form>
+<main class="page" id="main">
+    <h1>Sensor readings</h1>
+    <p>Record a reading for a field. Readings outside a crop's thresholds raise an alert.</p>
 
-<table class="table table-bordered">
-<tr><th>ID</th><th>Field</th><th>Metric</th><th>Value</th><th>Date</th></tr>
-<% if (!readings || readings.length === 0) { %>
-<tr><td colspan="5">No readings yet</td></tr>
-<% } else { %>
-  <% readings.forEach(r => { %>
-    <tr>
-      <td><%= r.reading_id %></td>
-      <td><%= r.field_name || r.field_id %></td>
-      <td><%= r.metric %></td>
-      <td><%= r.value %></td>
-      <td><%= r.reading_time %></td>
-    </tr>
-  <% }) %>
-<% } %>
-</table>
-<a href="/" class="btn btn-secondary">Back</a>
-</div>
-</body>
-</html>
+    <%
+        const metricLabel = { soil_moisture: 'Soil moisture', temperature: 'Temperature', ph: 'pH' };
+        const fieldList = (typeof fields !== 'undefined' && fields) ? fields : [];
+    %>
+
+    <h2>Add a reading</h2>
+
+    <form action="/readings" method="POST">
+        <div class="field">
+            <label for="field_id">Field</label>
+            <select id="field_id" name="field_id" required>
+                <option value="">Select a field</option>
+                <% fieldList.forEach((field) => { %>
+                    <option value="<%= field.field_id %>"><%= field.field_name %></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="metric">Metric</label>
+            <select id="metric" name="metric" required>
+                <option value="soil_moisture">Soil moisture</option>
+                <option value="temperature">Temperature</option>
+                <option value="ph">pH</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="value">Value</label>
+            <input type="number" step="0.01" id="value" name="value" required>
+        </div>
+
+        <button type="submit">Add reading</button>
+    </form>
+
+    <h2>Recent readings</h2>
+
+    <% if (readings && readings.length) { %>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Field</th>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Recorded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% readings.forEach((reading) => { %>
+                        <tr>
+                            <td><%= reading.reading_id %></td>
+                            <td><%= reading.field_name || reading.field_id %></td>
+                            <td><%= metricLabel[reading.metric] || reading.metric %></td>
+                            <td><%= reading.value %></td>
+                            <td><%= new Date(reading.reading_time).toLocaleString() %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <p class="empty">No readings yet.</p>
+    <% } %>
+</main>
+
+<%- include('partials/footer') %>
